@@ -15,7 +15,7 @@ from . import plink_reader
 import scipy as sp
 import warnings
 
-def scan(bfile,Y,cov,null,wnds,minSnps,i0,i1,perm_i,resfile,F,colCovarType_r='lowrank',rank_r=1):
+def scan(bfile,Y,cov,null,wnds,minSnps,i0,i1,perm_i,resfile,F,colCovarType_r='lowrank',rank_r=1,factr):
 
     if perm_i is not None:
         print(('Generating permutation (permutation %d)'%perm_i))
@@ -42,7 +42,7 @@ def scan(bfile,Y,cov,null,wnds,minSnps,i0,i1,perm_i,resfile,F,colCovarType_r='lo
             Xr = Xr[perm,:]
 
         Xr = np.ascontiguousarray(Xr)
-        rv = mtSet.optimize(Xr)
+        rv = mtSet.optimize(Xr,factr=factr)
         line = np.concatenate([wnds[wnd_i,:],rv['LLR']])
         wnd_file.writerow(line)
     pass
@@ -86,6 +86,6 @@ def analyze(options):
 
     # analysis
     t0 = time.time()
-    scan(options.bfile,Y,cov,null,wnds,options.minSnps,options.i0,options.i1,options.perm_i,resfile,F,options.colCovarType_r,options.rank_r)
+    scan(options.bfile,Y,cov,null,wnds,options.minSnps,options.i0,options.i1,options.perm_i,resfile,F,options.colCovarType_r,options.rank_r,options.factr)
     t1 = time.time()
     print(('... finished in %s seconds'%(t1-t0)))

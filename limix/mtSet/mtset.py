@@ -218,7 +218,7 @@ class MTSet():
     # Fitting alternative model
     ###########################################
 
-    def optimize(self, G, params0=None, n_times=10, verbose=False, vmax=5, perturb=1e-3, factr=10**7):
+    def optimize(self, G, params0=None, n_times=10, verbose=False, vmax=5, perturb=1e-3, factr=1e7):
         """
         Optimize the model considering G
         """
