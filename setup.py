@@ -298,7 +298,8 @@ def setup_package(reswig, yes, compatible):
                 'mtSet_preprocess=limix.scripts.mtSet_preprocess:entry_point',
                 'mtSet_simPheno=limix.scripts.mtSet_simPheno:entry_point',
                 'mtSet_analyze=limix.scripts.mtSet_analyze:entry_point',
-                'limix_converter=limix.scripts.limix_converter:entry_point'
+                'limix_converter=limix.scripts.limix_converter:entry_point',
+                'iSet_analyze=limix.scripts.iSet_analyze:entry_point',
             ]
         },
         classifiers=[
