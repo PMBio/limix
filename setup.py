@@ -300,6 +300,7 @@ def setup_package(reswig, yes, compatible):
                 'mtSet_analyze=limix.scripts.mtSet_analyze:entry_point',
                 'limix_converter=limix.scripts.limix_converter:entry_point',
                 'iSet_analyze=limix.scripts.iSet_analyze:entry_point',
+                'iSet_postprocess=limix.scripts.iSet_postprocess:entry_point',
             ]
         },
         classifiers=[
