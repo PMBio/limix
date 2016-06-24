@@ -22,13 +22,13 @@ from ..mtSet.core import plink_reader
 
 def entry_point():
     parser = OptionParser()
-    parser.add_option("--design", type=bytes, default='complete')
     parser.add_option("--bfile", dest='bfile', type=str, default=None)
     parser.add_option("--cfile", dest='cfile', type=str, default=None)
     parser.add_option("--pfile", dest='pfile', type=str, default=None)
     parser.add_option("--nfile", dest='nfile', type=str, default=None)
     parser.add_option("--wfile", dest='wfile', type=str, default=None)
     parser.add_option("--ffile", dest='ffile', type=str, default=None)
+    parser.add_option("--ifile", dest='ifile', type=str, default=None)
     parser.add_option("--resdir", dest='resdir', type=str, default='./')
     parser.add_option("--trait_idx",dest='trait_idx',type=str, default=None)
 
@@ -66,19 +66,20 @@ def entry_point():
     i0 = 1 if options.i0 is None else options.i0
     i1 = wnds.shape[0] if options.i1 is None else options.i1
 
-    S_R = cov['eval']
-    U_R = cov['evec']
-
     df = pd.DataFrame()
     df0 = pd.DataFrame()
     t0 = time.time()
 
-    if options.design == 'complete':
+    S_R = cov['eval']
+    U_R = cov['evec']
+
+    if options.ifile is None:
         strat = False
-    elif options.design == 'strat':
-        strat = True
     else:
-        assert False
+        strat = True
+        print(".. loading indicator file %s " % options.ifile)
+        Ie = np.asarray(pd.read_csv(options.ifile, index_col=0)).flatten()
+        covs = sp.concatenate([U_R[:,-10:], sp.ones([U_R.shape[0], 1])], 1)
 
     res_dir = os.path.join(options.resdir,'test')
 
@@ -102,8 +103,12 @@ def entry_point():
         Xr/= Xr.std(0)
         Xr/= np.sqrt(Xr.shape[1])
 
-        _df, _df0 = fit_iSet(Y, U_R=U_R, S_R=S_R, Xr=Xr,
-                             n_perms=options.n_perms, strat=strat)
+        if strat:
+            _df, _df0 = fit_iSet(Y[:,[0]], Xr=Xr, covs=covs,
+                                 n_perms=options.n_perms, Ie=Ie, strat=strat)
+        else:
+            _df, _df0 = fit_iSet(Y, U_R=U_R, S_R=S_R, Xr=Xr,
+                                 n_perms=options.n_perms, strat=strat)
 
         _df.index = [wnd_i]
         _df.index.name = 'window'
@@ -115,5 +120,6 @@ def entry_point():
         df0 = df0.append(_df0)
     print 'Elapsed:', time.time()-t0
 
-    df.to_csv(resfile + '.iSet.real')
-    df0.to_csv(resfile + '.iSet.perm')
+    design = 'strat' if strat else 'complete'
+    df.to_csv(resfile + '.iSet.%s.real' % design)
+    df0.to_csv(resfile + '.iSet.%s.perm' % design)
