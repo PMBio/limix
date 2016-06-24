@@ -34,9 +34,9 @@ def entry_point():
 
     # start window, end window and permutations
     parser.add_option("--minSnps", dest='minSnps', type=int, default=4)
+    parser.add_option("--n_perms", type=int, default=10)
     parser.add_option("--start_wnd", dest='i0', type=int, default=None)
     parser.add_option("--end_wnd", dest='i1', type=int, default=None)
-    parser.add_option("--perm", dest='perm_i', type=int, default=None)
     parser.add_option("--factr", dest='factr', type=float, default=1e7)
 
     (options, args) = parser.parse_args()
@@ -51,8 +51,6 @@ def entry_point():
 
     Y = readPhenoFile(options.pfile,idx=options.trait_idx)
     null = readNullModelFile(options.nfile)
-
-    # R = sp.loadtxt(sample_relatedness_file)
 
     wnds = readWindowsFile(options.wfile)
 
@@ -81,16 +79,14 @@ def entry_point():
     else:
         assert False
 
-    if options.perm_i is not None:
-        res_dir = os.path.join(options.resdir,'perm%d'%options.perm_i)
-    else:
-        res_dir = os.path.join(options.resdir,'test')
+    res_dir = os.path.join(options.resdir,'test')
+
     if not os.path.exists(res_dir):
         os.makedirs(res_dir)
 
     n_digits = len(str(wnds.shape[0]))
     fname = str(i0).zfill(n_digits)
-    fname+= '_'+str(i1).zfill(n_digits)+'.res'
+    fname+= '_'+str(i1).zfill(n_digits)
     resfile = os.path.join(res_dir, fname)
 
     for wnd_i in range(i0,i1):
@@ -105,10 +101,18 @@ def entry_point():
         Xr/= Xr.std(0)
         Xr/= np.sqrt(Xr.shape[1])
 
-        _df, _df0 = fit_iSet(Y, U_R=U_R, S_R=S_R, Xr=Xr, n_perms=10, strat=strat)
-        df.append(_df)
-        df0.append(_df0)
+        _df, _df0 = fit_iSet(Y, U_R=U_R, S_R=S_R, Xr=Xr,
+                             n_perms=options.n_perms, strat=strat)
+
+        _df.index = [wnd_i]
+        _df.index.name = 'window'
+
+        _df0.index = ['%d_%d' % (wnd_i, perm) for perm in range(_df0.shape[0])]
+        _df0.index.name = 'window_perm'
+
+        df = df.append(_df)
+        df0 = df0.append(_df0)
     print 'Elapsed:', time.time()-t0
 
-    df.to_csv(os.path.join(res_dir, 'iset.df'))
-    df0.to_csv(os.path.join(res_dir, 'iset.df0'))
+    df.to_csv(resfile + '.iSet.real')
+    df0.to_csv(resfile + '.iSet.perm')
