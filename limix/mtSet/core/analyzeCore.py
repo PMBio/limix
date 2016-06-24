@@ -15,7 +15,7 @@ from . import plink_reader
 import scipy as sp
 import warnings
 
-def scan(bfile,Y,cov,null,wnds,minSnps,i0,i1,perm_i,resfile,F,colCovarType_r='lowrank',rank_r=1,factr):
+def scan(bfile,Y,cov,null,wnds,minSnps,i0,i1,perm_i,resfile,F,colCovarType_r='lowrank',rank_r=1,factr=1e7):
 
     if perm_i is not None:
         print(('Generating permutation (permutation %d)'%perm_i))
