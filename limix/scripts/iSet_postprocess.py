@@ -26,6 +26,7 @@ def entry_point():
     out_file = options.outfile
     tol = options.tol
 
+    import ipdb; ipdb.set_trace()
     print('.. load permutation results')
     file_name = os.path.join(resdir, 'test', '*.iSet.perm')
     files = glob.glob(file_name)

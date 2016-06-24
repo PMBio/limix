@@ -43,6 +43,7 @@ def entry_point():
 
     print('importing data')
     if options.cfile is None:
+        import warnings
         cov = {'eval':None, 'evec':None}
         warnings.warn('warning: cfile not specifed, a one variance compoenent'+
                       ' model will be considered')
