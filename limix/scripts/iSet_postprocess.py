@@ -53,6 +53,9 @@ def entry_point():
     if options.manhattan:
         import limix.utils.plot as plot
 
+        if not os.path.exists(options.outfile):
+            os.makedirs(options.outfile)
+
         def plot_manhattan(pv, out_file):
             import matplotlib.pylab as PLT
             import scipy as SP
@@ -61,9 +64,7 @@ def entry_point():
             plot.plot_manhattan(posCum[idx],pv[idx],alphaNS=1.0,alphaS=1.0)
             PLT.savefig(out_file)
 
-        prefix = os.path.join(resdir)
-
         for test in ['mtSet', 'iSet', 'iSet-het']:
-            out_file = os.path.join(prefix, 'iSet.%s_pv.manhattan.jpg' % test)
+            out_file = os.path.join(options.outfile, 'iSet.%s_pv.manhattan.jpg' % test)
             print(".. saving " + out_file)
             plot_manhattan(df['%s pv' % test].values, out_file)
