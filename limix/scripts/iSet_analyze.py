@@ -25,7 +25,6 @@ def entry_point():
     parser.add_option("--bfile", dest='bfile', type=str, default=None)
     parser.add_option("--cfile", dest='cfile', type=str, default=None)
     parser.add_option("--pfile", dest='pfile', type=str, default=None)
-    parser.add_option("--nfile", dest='nfile', type=str, default=None)
     parser.add_option("--wfile", dest='wfile', type=str, default=None)
     parser.add_option("--ffile", dest='ffile', type=str, default=None)
     parser.add_option("--ifile", dest='ifile', type=str, default=None)
@@ -51,7 +50,6 @@ def entry_point():
         cov = readCovarianceMatrixFile(options.cfile, readCov=False)
 
     Y = readPhenoFile(options.pfile,idx=options.trait_idx)
-    null = readNullModelFile(options.nfile)
 
     wnds = readWindowsFile(options.wfile)
 
