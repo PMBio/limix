@@ -16,7 +16,6 @@ def entry_point():
     parser.add_option("--resdir", dest='resdir', type=str, default='./')
     parser.add_option("--outfile", dest='outfile', type=str, default=None)
     parser.add_option("--manhattan_plot", dest='manhattan',action="store_true",default=False)
-    parser.add_option("--strat", action="store_true", default=False)
     parser.add_option("--tol", dest='tol', type=float, default=4e-3)
     (options, args) = parser.parse_args()
 
@@ -26,8 +25,7 @@ def entry_point():
     tol = options.tol
 
     print('.. load permutation results')
-    design = 'strat' if options.strat else 'complete'
-    file_name = os.path.join(resdir, 'test', '*.iSet.%s.perm' % design)
+    file_name = os.path.join(resdir, 'test', '*.iSet.perm')
     files = glob.glob(file_name)
     df0 = pd.DataFrame()
     for _file in files:
@@ -35,7 +33,7 @@ def entry_point():
         df0 = df0.append(pd.read_csv(_file, index_col=0))
 
     print('.. load real results')
-    file_name = os.path.join(resdir, 'test', '*.iSet.%s.real' % design)
+    file_name = os.path.join(resdir, 'test', '*.iSet.real')
     files = glob.glob(file_name)
     df = pd.DataFrame()
     for _file in files:
@@ -47,7 +45,7 @@ def entry_point():
         df[test+' pv'] = calc_emp_pv_eff(df[test+' LLR'].values,
                                          df0[test+' LLR0'].values)
 
-    outfile = os.path.join(resdir, 'test', 'final.iSet.%s.real' % design)
+    outfile = os.path.join(resdir, 'test', 'final.iSet.real')
     print('.. saving %s' % outfile)
     df.to_csv(outfile)
 
@@ -67,7 +65,7 @@ def entry_point():
 
         for test in ['mtSet', 'iSet', 'iSet-het']:
             out_file = os.path.join(options.outfile,
-                                    'iSet.%s.%s_pv.manhattan.png'\
-                                    % (design, test))
+                                    'iSet.%s_pv.manhattan.png'\
+                                    % (test,))
             print(".. saving " + out_file)
             plot_manhattan(df['%s pv' % test].values, out_file)

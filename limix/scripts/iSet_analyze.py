@@ -118,6 +118,5 @@ def entry_point():
         df0 = df0.append(_df0)
     print 'Elapsed:', time.time()-t0
 
-    design = 'strat' if strat else 'complete'
-    df.to_csv(resfile + '.iSet.%s.real' % design)
-    df0.to_csv(resfile + '.iSet.%s.perm' % design)
+    df.to_csv(resfile + '.iSet.real')
+    df0.to_csv(resfile + '.iSet.perm')
