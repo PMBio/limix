@@ -31,6 +31,7 @@ def run_individual_model(model, expression_file, position_file, output_directory
     with open(expression_file, 'r') as f:
         prot_tmp = f.readline()
     protein_names = prot_tmp.split(' ')
+    protein_names[-1] = protein_names[-1][0:-1]  # removing the newline sign at the end of the last protein
     protein_names = np.reshape(protein_names, [len(protein_names), 1])
     phenotypes = np.genfromtxt(expression_file, delimiter=' ', skiprows=1)
 
@@ -127,6 +128,11 @@ def run_individual_model(model, expression_file, position_file, output_directory
                     'environment_length'
 
     with open(output_file, 'w') as f:
-        np.savetxt(f, np.hstack((protein_names, parameters)), delimiter=' ', header=result_header, fmt='%s')
+        np.savetxt(f,
+                   np.hstack((protein_names, parameters)),
+                   delimiter=' ',
+                   header=result_header,
+                   fmt='%s',
+                   comments='')
 
 

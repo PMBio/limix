@@ -10,8 +10,8 @@ def run_all_models(input_directory, overwrite=False):
     results_directory = util_functions.make_dir(results_directory, overwrite)
 
     # file_names
-    positions = input_directory+'/positions.csv'
-    expressions = input_directory+'/expressions.csv'
+    positions = input_directory+'/positions.txt'
+    expressions = input_directory+'/expressions.txt'
 
     # full model
     run_individual_model('full', expressions, positions, results_directory, permute_positions=False)
