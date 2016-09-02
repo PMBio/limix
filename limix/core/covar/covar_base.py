@@ -1,3 +1,5 @@
+import pdb
+
 import sys
 from limix.core.type.observed import Observed
 from hcache import Cached, cached
@@ -112,7 +114,13 @@ class Covariance(Cached, Observed):
 
     @cached('covar_base')
     def chol(self):
+        # print 'chol called'
         return LA.cholesky(self.K()).T
+
+        # try:
+        #     return LA.cholesky(self.K()).T
+        # except:
+        #     pdb.set_trace()
 
     @cached('covar_base')
     def inv(self):
