@@ -58,15 +58,6 @@ def create_analysis_tree(position_dir, expressions_dir, analysis_dir):
         shutil.copy(expression_files[image_index], expression_file_cp)
 
 
-
-# IMC_files_dir = '/Users/damienarnol1/Documents/local/pro/PhD/data/SampleSet_1/IMC_data'
-# expression_file =  '/Users/damienarnol1/Documents/local/pro/PhD/data/Zurich_data/output/membrane/posterior_expression_E1'
-#
-expression_dir = '/Users/damienarnol1/Documents/local/pro/PhD/social_effects/pipeline_test/test_split'
-position_dir =  '/Users/damienarnol1/Documents/local/pro/PhD/data/SampleSet_1/output/tmp/positions'
-#
-# split_expression_file(expression_file, IMC_files_dir, output_dir)
-
-tree_dir = '/Users/damienarnol1/Documents/local/pro/PhD/social_effects/pipeline_test/tree_test'
-
-create_analysis_tree(position_dir, expression_dir, tree_dir)
+# 1 - define necessary file names and directory names
+# 2 - create analysis tree
+# 3 - submit one job per directory of the tree
