@@ -26,14 +26,12 @@ def run_individual_model(model, expression_file, position_file, output_directory
     if model is not 'full' and model is not 'env':
         raise Exception('model not understood. Please specify a model between full and env')
 
-    # TODO get the header for the protein names and put it as row names (or additional column) for the
-    # read phenotypes data
     with open(expression_file, 'r') as f:
         prot_tmp = f.readline()
     protein_names = prot_tmp.split(' ')
     protein_names[-1] = protein_names[-1][0:-1]  # removing the newline sign at the end of the last protein
     protein_names = np.reshape(protein_names, [len(protein_names), 1])
-    phenotypes = np.genfromtxt(expression_file, delimiter=' ', skiprows=1)
+    phenotypes = np.loadtxt(expression_file, delimiter=' ', skiprows=1)
 
     # read position data
     X = np.genfromtxt(position_file, delimiter=',')
@@ -76,7 +74,8 @@ def run_individual_model(model, expression_file, position_file, output_directory
 
         # local_noise
         local_noise_cov = SQExpCov(X)
-
+        local_noise_cov.length = 100
+        local_noise_cov.act_length = False
         # environment effect
         environment_cov = ZKZCov(X, Kinship, rm_diag)
 
@@ -88,8 +87,8 @@ def run_individual_model(model, expression_file, position_file, output_directory
         #######################################################################
         cov = SumCov(noise_cov, local_noise_cov)
         cov = SumCov(cov, environment_cov)
-        environment_cov.length = float(N_cells) / 50
-
+        environment_cov.length = 200
+        environment_cov.act_length = False
         if model == 'full':
             cov = SumCov(cov, direct_cov)
         else:

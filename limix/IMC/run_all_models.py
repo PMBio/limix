@@ -2,7 +2,7 @@ __author__ = 'damienarnol1'
 
 import util_functions
 from run_individual_model import run_individual_model
-
+import sys
 
 def run_all_models(input_directory, overwrite=False):
     # create a results directory in which to write the files
@@ -29,6 +29,5 @@ def run_all_models(input_directory, overwrite=False):
 
 
 
-
-
-run_all_models('/Users/damienarnol1/Documents/local/pro/PhD/social_effects/pipeline_test/test_1/', False)
+analysis_directory = sys.argv[1]
+run_all_models(analysis_directory, False)
