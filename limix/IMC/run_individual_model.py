@@ -26,6 +26,7 @@ def run_individual_model(model, expression_file, position_file, output_directory
     if model is not 'full' and model is not 'env':
         raise Exception('model not understood. Please specify a model between full and env')
 
+    # read phenotypes data
     with open(expression_file, 'r') as f:
         prot_tmp = f.readline()
     protein_names = prot_tmp.split(' ')

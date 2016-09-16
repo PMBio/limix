@@ -7,6 +7,7 @@ import util_functions
 import shutil
 import subprocess
 
+
 def split_expression_file(expression_file, IMC_dir, output_dir):
     # read protein names
     with open(expression_file, 'r') as f:
@@ -45,9 +46,6 @@ def create_analysis_tree(position_dir, expressions_dir, analysis_dir):
     
     expression_files = glob.glob(expressions_dir+'/*')
     expression_files = sorted(expression_files)
-
-    print expression_files
-    print position_files
 
     # reading and creating tree
     for image_index in range(0, len(position_names)):

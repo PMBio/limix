@@ -2,6 +2,10 @@ __author__ = 'damienarnol1'
 
 import os
 import shutil
+import glob
+import numpy as np
+import scipy.spatial as SS
+
 
 
 def make_dir(dir_name, overwrite=False):
@@ -22,4 +26,22 @@ def make_dir(dir_name, overwrite=False):
 
     os.makedirs(dir_name)
     return dir_name+'/'
+
+
+def compute_all_pairwise_distances(positions_directory, output_directory):
+    all_files = sorted(glob.glob(positions_directory+'/*'))
+
+    counter = 0
+
+    for file_name in all_files:
+        positions = np.loadtxt(file_name, delimiter=',')
+        distances = SS.distance.pdist(positions, 'euclidean')
+
+        image_name = file_name.split('/')[-1]
+        output_file_name = output_directory+'/'+image_name
+        np.savetxt(output_file_name, distances, delimiter=' ')
+
+
+
+
 
