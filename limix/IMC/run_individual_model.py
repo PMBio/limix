@@ -19,7 +19,8 @@ def normalise(mat, axis=1):
     return mat
 
 
-def run_individual_model(model, expression_file, position_file, output_directory, permute_positions=False):
+def run_individual_model(model, expression_file, position_file, output_directory,
+                         permute_positions=False, random_start_point=False):
 
     rm_diag = True
 
@@ -51,6 +52,8 @@ def run_individual_model(model, expression_file, position_file, output_directory
     N_cells = phenotypes.shape[0]
 
     parameters = np.zeros([phenotypes.shape[1], 6])
+
+    log_lik = np.zeros(phenotypes.shape[1])
 
     for phen in range(0, phenotypes.shape[1]):
 
@@ -88,8 +91,14 @@ def run_individual_model(model, expression_file, position_file, output_directory
         #######################################################################
         cov = SumCov(noise_cov, local_noise_cov)
         cov = SumCov(cov, environment_cov)
-        environment_cov.length = 200
-        environment_cov.act_length = False
+        if random_start_point:
+            environment_cov.length = np.random.uniform(10, 300)
+            environment_cov.scale = np.random.uniform(1, 15)
+
+        else:
+            environment_cov.length = 200
+        # environment_cov.act_length = False
+
         if model == 'full':
             cov = SumCov(cov, direct_cov)
         else:
@@ -103,6 +112,9 @@ def run_individual_model(model, expression_file, position_file, output_directory
         except:
             print 'optimisation', str(phen), 'failed'
             continue
+
+        log_lik[phen] = gp.LML()
+
 
         # rescale each terms to sample variance one
         # direct cov: unnecessary as fixed covariance rescaled before optimisation
@@ -134,5 +146,9 @@ def run_individual_model(model, expression_file, position_file, output_directory
                    header=result_header,
                    fmt='%s',
                    comments='')
+
+    log_lik_file = output_file + '_loglik'
+    with open(log_lik_file, 'w') as f:
+        np.savetxt(f, log_lik)
 
 

@@ -84,8 +84,12 @@ create_analysis_tree(positions_dir, expression_dir, analysis_dir)
 # list directories 
 image_dirs = glob.glob(analysis_dir+'/*')
 for image_dir in image_dirs:
-    command_line = 'bsub -o /homes/arnol/random_effect_model/log -M 15000 -R "rusage[mem=15000]" python run_all_models.py ' + image_dir
-    os.system(command_line)
+    for start_point_index in range(0, 5):
+        command_line = \
+            'bsub -o /homes/arnol/random_effect_model/log -M 15000 -R "rusage[mem=15000]" python run_all_models.py ' + \
+            image_dir + \
+            start_point_index
+        os.system(command_line)
 
 
 
