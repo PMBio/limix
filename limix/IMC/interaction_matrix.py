@@ -5,7 +5,7 @@ import os
 import glob
 import util_functions
 import shutil
-import subprocess
+
 
 
 def split_expression_file(expression_file, IMC_dir, output_dir):
@@ -36,14 +36,14 @@ def create_analysis_tree(position_dir, expressions_dir, analysis_dir):
     position_names = os.listdir(position_dir)
     position_names = [name.split('_')[0] for name in position_names]
     position_names = sorted(position_names)
-    
+
     expression_names = os.listdir(expressions_dir)
     expression_names = sorted(expression_names)
 
     # full path of the file for processing
     position_files = glob.glob(position_dir+'/*')
     position_files = sorted(position_files)
-    
+
     expression_files = glob.glob(expressions_dir+'/*')
     expression_files = sorted(expression_files)
 
@@ -79,17 +79,25 @@ analysis_dir = '/homes/arnol/random_effect_model/analysis_2/'
 split_expression_file(all_expressions_file, IMC_dir, expression_dir)
 create_analysis_tree(positions_dir, expression_dir, analysis_dir)
 
-# running model on every directory 
+# protein list
+protein_list = ['pAKT', 'AMPK', 'pBAD', 'bcatenin', 'CAHIX', 'CD20', 'CD3', 'CD44', 'CD45', 'CD68', 'CC3', 'cMyc',
+                'CREB', 'Cytokeratin7', 'PanKeratin', 'Ecadherin', 'EGFR', 'EpCAM', 'ERa', 'pERK12', 'Fibronectin',
+                'GATA3', 'HER2', 'H3', 'Ki67', 'PRAB', 'S6', 'SHP2', 'Slug', 'SMA', 'Twist', 'Vimentin']
 
-# list directories 
+# running model on every directory
+
+# list directories
 image_dirs = glob.glob(analysis_dir+'/*')
 for image_dir in image_dirs:
-    for start_point_index in range(0, 5):
-        command_line = \
-            'bsub -o /homes/arnol/random_effect_model/log -M 15000 -R "rusage[mem=15000]" python run_all_models.py ' + \
-            image_dir + ' ' + \
-            str(start_point_index)
-        os.system(command_line)
+    result_directory = image_dir+'/results/'
+    util_functions.make_dir(result_directory, overwrite=False)
+    for protein_1 in protein_list:
+        for protein_2 in protein_list:
+            file_name = result_directory+'/'+protein_1+'_'+protein_2
+            command_line = \
+                'bsub -o /homes/arnol/random_effect_model/log -M 15000 -R "rusage[mem=15000]" python pairwise_interaction.py ' + \
+                protein_1 + ' ' + protein_2 + ' ' + file_name + ' ' + image_dir
+            os.system(command_line)
 
 
 
