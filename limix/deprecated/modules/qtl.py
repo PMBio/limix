@@ -531,10 +531,13 @@ def forward_lmm(snps,pheno,K=None,covs=None,qvalues=False,threshold=5e-8,maxiter
 
     lm = test_lmm(snps,pheno,K=K,covs=covs,test=test,**kw_args)
     pvall = []
+    betall = []
     pv = lm.getPv().ravel()
+    beta = lm.getBetaSNP().ravel()
     #hack to avoid issues with degenerate pv
     pv[sp.isnan(pv)] = 1
     pvall.append(pv)
+    betall.append(beta)
     imin= pv.argmin()
     niter = 1
     #start stuff
@@ -559,8 +562,10 @@ def forward_lmm(snps,pheno,K=None,covs=None,qvalues=False,threshold=5e-8,maxiter
         lm.setCovs(covs)
         lm.process()
         pv = lm.getPv().ravel()
+        beta = lm.getBetaSNP().ravel()
         pv[sp.isnan(pv)] = 1
         pvall.append(pv)
+        betall.append(beta)
         imin= pv.argmin()
         if qvalues:
             qv = FDR.qvalues(pv)
@@ -576,6 +581,7 @@ def forward_lmm(snps,pheno,K=None,covs=None,qvalues=False,threshold=5e-8,maxiter
     RV['iadded']  = iadded
     RV['pvadded'] = pvadded
     RV['pvall']   = np.array(pvall)
+    RV['betall']   = np.array(betall)
     if qvalues:
         RV['qvall'] = np.array(qvall)
         RV['qvadded'] = qvadded
