@@ -27,7 +27,7 @@ class Cov2KronSumLR(Covariance):
         - rank_r: rank of low-rank row covariance
     """
 
-    def __init__(self, Cn = None, G = None, rank = 1):
+    def __init__(self, Cn = None, G = None, Cr=None, rank = 1):
         """
         Args:
             Cn:     Limix covariance matrix for Cn (dimension dim_c)
@@ -37,7 +37,7 @@ class Cov2KronSumLR(Covariance):
         Covariance.__init__(self)
         self._Cr_act = True
         self._Cn_act = True
-        self.setColCovars(Cn, rank = rank)
+        self.setColCovars(Cr, Cn, rank = rank)
         self.G = G
         self.dim = self.dim_c * self.dim_r
         self._use_to_predict = False
@@ -101,12 +101,15 @@ class Cov2KronSumLR(Covariance):
         self.G_has_changed()
 
     # normal setter for col covars
-    def setColCovars(self, Cn = None, rank = 1):
+    def setColCovars(self, Cr=None, Cn = None, rank = 1):
         assert Cn is not None, 'Cn has to be specified.'
-        self._rank_c = rank
-        self._dim_c = Cn.dim
-        self._Cr = LowRankCov(self._dim_c, rank)
+        # set noise
         self._Cn = Cn
+        self._dim_c = Cn.dim
+        # set region
+        if Cr is None:  Cr = LowRankCov(self._dim_c, rank)
+        self._Cr = Cr 
+        self._rank_c = self.Cr.X.shape[1]
         # register
         self._Cr.register(self.col_covs_have_changed)
         self._Cn.register(self.col_covs_have_changed)
@@ -288,9 +291,30 @@ class Cov2KronSumLR(Covariance):
 
         return sp.dot(self.G, self.G.T)
 
+    def solve_t(self, Mt):
+        """
+        Mt is dim_r x dim_c x d tensor
+        """
+        if len(Mt.shape)==2:    _Mt = Mt[:, :, sp.newaxis]
+        else:                   _Mt = Mt
+        M = _Mt.transpose([0,2,1])
+        MLc = sp.tensordot(M, self.Lc().T, (2,0)) 
+        MLcLc = sp.tensordot(MLc, self.Lc(), (2,0)) 
+        WrMLcWc = sp.tensordot(sp.tensordot(self.Wr(), MLc, (1,0)), self.Wc().T, (2,0))
+        DWrMLcWc = sp.tensordot(self.D()[:,sp.newaxis,:]*WrMLcWc, self.Wc(), (2,0))
+        WrDWrMLcWcLc = sp.tensordot(self.Wr().T, sp.tensordot(DWrMLcWc, self.Lc(), (2,0)), (1,0))
+        RV = (MLcLc - WrDWrMLcWcLc).transpose([0,2,1])
+        if len(Mt.shape)==2:    RV = RV[:, :, 0]
+        return RV
+
     #####################
     # Overwritten covar_base methods
     #####################
+    def solve(self, M):
+        Mt = M.reshape((self.dim_r, self.dim_c, M.shape[1]), order='F')
+        Rt = self.solve_t(Mt)
+        return Rt.reshape(M.shape, order='F')
+
     @cached(['row_cov', 'col_cov', 'covar_base'])
     def K(self):
         if self.dim > _MAX_DIM:

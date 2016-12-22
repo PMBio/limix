@@ -158,7 +158,11 @@ class CategoricalLR(Covariance):
         else:
             R = self.d_grad_i(i-self.Cr.getNumberParams())[:, sp.newaxis] * M
         return R
-        
+
+    def Kh_dot(self, M):
+        R = (self.d_inv()**(-0.5))[:,sp.newaxis]*M
+        R+= sp.dot(self.W(), sp.dot(self.W().T, M))
+        return R
 
     #####################
     # Cached

@@ -64,6 +64,10 @@ class Cov2KronSum(Covariance):
         return self._Cg
 
     @property
+    def Cr(self):
+        return self._Cg
+
+    @property
     def Cn(self):
         return self._Cn
 
