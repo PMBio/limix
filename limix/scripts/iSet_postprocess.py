@@ -15,7 +15,7 @@ def entry_point():
     parser = OptionParser()
     parser.add_option("--resdir", dest='resdir', type=str, default='./')
     parser.add_option("--outfile", dest='outfile', type=str, default=None)
-    parser.add_option("--manhattan_plot", dest='manhattan',action="store_true",default=False)
+    #parser.add_option("--manhattan_plot", dest='manhattan',action="store_true",default=False)
     parser.add_option("--tol", dest='tol', type=float, default=4e-3)
     (options, args) = parser.parse_args()
 
@@ -45,27 +45,27 @@ def entry_point():
         df[test+' pv'] = calc_emp_pv_eff(df[test+' LLR'].values,
                                          df0[test+' LLR0'].values)
 
-    outfile = os.path.join(resdir, 'test', 'final.iSet.real')
-    print('.. saving %s' % outfile)
-    df.to_csv(outfile)
+    print('.. saving %s' % out_file+'.res')
+    df.to_csv(out_file+'.res')
 
-    if options.manhattan:
-        import limix.utils.plot as plot
+    if 0:
+        if options.manhattan:
+            import limix.utils.plot as plot
 
-        if not os.path.exists(options.outfile):
-            os.makedirs(options.outfile)
+            if not os.path.exists(options.outfile):
+                os.makedirs(options.outfile)
 
-        def plot_manhattan(pv, out_file):
-            import matplotlib.pylab as PLT
-            import scipy as SP
-            posCum = SP.arange(pv.shape[0])
-            idx=~SP.isnan(pv)
-            plot.plot_manhattan(posCum[idx],pv[idx],alphaNS=1.0,alphaS=1.0)
-            PLT.savefig(out_file)
+            def plot_manhattan(pv, out_file):
+                import matplotlib.pylab as PLT
+                import scipy as SP
+                posCum = SP.arange(pv.shape[0])
+                idx=~SP.isnan(pv)
+                plot.plot_manhattan(posCum[idx],pv[idx],alphaNS=1.0,alphaS=1.0)
+                PLT.savefig(out_file)
 
-        for test in ['mtSet', 'iSet', 'iSet-het']:
-            out_file = os.path.join(options.outfile,
-                                    'iSet.%s_pv.manhattan.png'\
-                                    % (test,))
-            print(".. saving " + out_file)
-            plot_manhattan(df['%s pv' % test].values, out_file)
+            for test in ['mtSet', 'iSet', 'iSet-het']:
+                out_file = os.path.join(options.outfile,
+                                        'iSet.%s_pv.manhattan.png'\
+                                        % (test,))
+                print(".. saving " + out_file)
+                plot_manhattan(df['%s pv' % test].values, out_file)
