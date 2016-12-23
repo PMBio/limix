@@ -1,6 +1,7 @@
 from mvSet import MvSetTest
 from mvSetFull import MvSetTestFull
 from mvSetInc import MvSetTestInc
+import pandas as pd
 
 def fit_iSet(Y=None, Xr=None, F=None, Rr=None, factr=1e7, Rg=None, Ug=None, Sg=None, Ie=None, n_nulls=10):
     # data
@@ -25,21 +26,24 @@ def fit_iSet(Y=None, Xr=None, F=None, Rr=None, factr=1e7, Rg=None, Ug=None, Sg=N
     assert not (strat and bgRE), msg
 
     #define mtSet
-    if bgRE:        mvset = MvSetTest(Y=Y,Xr=Xr,F=F,Rr=Rr,factr=factr)
-    elif strat:     mvset = MvSetTestFull(Y=Y,Xr=Xr,Rg=Rg,Ug=Ug,Sg=Sg,factr=factr)
-    else:           mvset = MvSetTestInc(Y=Y,Xr=Xr,F=F,Ie=Ie,factr=factr)
+    if bgRE:        mvset = MvSetTestFull(Y=Y,Xr=Xr,Rg=Rg,Ug=Ug,Sg=Sg,factr=factr)
+    elif strat:     mvset = MvSetTestInc(Y=Y,Xr=Xr,F=F,Ie=Ie,factr=factr)
+    else:           mvset = MvSetTest(Y=Y,Xr=Xr,F=F,Rr=Rr,factr=factr)
 
-    RV = {} 
+    RV = {}
     RV['mtSet LLR'] = mvset.assoc()
     RV['iSet LLR'] = mvset.gxe()
     RV['iSet-het LLR'] = mvset.gxehet()
-    pdb.set_trace()
+    RV['Persistent Var'] = mvset.info['full']['var_r'][0]
+    RV['Rescaling-GxC Var'] = mvset.info['full']['var_r'][1]
+    RV['Heterogeneity-GxC var'] = mvset.info['full']['var_r'][2]
+    df = pd.DataFrame(RV)
 
     RV0 = {}
     RV0['mtSet LLR0'] = mvset.assoc_null(n_nulls=n_nulls)
     RV0['iSet LLR0'] = mvset.gxe_null(n_nulls=n_nulls)
     RV0['iSet-het LLR0'] = mvset.gxehet_null(n_nulls=n_nulls)
+    df0 = pd.DataFrame(RV0)
 
+    return df, df0
 
-    columns = ['mtSet LLR', 'iSet LLR', 'iSet-het LLR',
-                'Persistent Var', 'Rescaling-GxC Var', 'Heterogeneity-GxC var', 'Converged']

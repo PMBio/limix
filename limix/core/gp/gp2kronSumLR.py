@@ -35,7 +35,7 @@ class GP2KronSumLR(GP):
         rank_r = rank of low-rank row covariance
     """
 
-    def __init__(self, Y, Cn, G, F=None, A=None, rank=1):
+    def __init__(self, Y, Cn, G, F=None, A=None, rank=1, Cr=None):
         """
         Args:
             Y:      [N, P] phenotype matrix
@@ -49,8 +49,7 @@ class GP2KronSumLR(GP):
         assert_subtype(Cn, Covariance, 'Cn')
         assert_type(G, NP.ndarray, 'G')
 
-        covar = Cov2KronSumLR(Cn=Cn, G=G, rank=rank)
-        covar.setRandomParams()
+        covar = Cov2KronSumLR(Cn=Cn, G=G, rank=rank, Cr=Cr)
         mean = MeanKronSum(Y=Y, F=F, A=A)
         assert mean.n_terms <= 1, ('GP2KronSum supports MeanKronSum'
                                    ' means with maximum 1 term!')
@@ -403,3 +402,17 @@ class GP2KronSumLR(GP):
         #r+= (self.DWrFBALcWc() * self.SrDWrFBALcWcCbar(i)).sum()
         #r+= - 2 * (self.WrRFBALcCtildeWc(i) * self.DWrFBALcWc()).sum()
         return r
+
+    ############################
+    # Simulate
+    ############################
+    def simulate_pheno(self):
+        Yc = sp.dot(self.mean.F[0], sp.dot(self.mean.B[0], self.mean.A[0].T))
+        Z = sp.randn(self.covar.G.shape[1], self.covar.Cr.X.shape[1])
+        Yr = sp.dot(self.covar.G, sp.dot(Z, self.covar.Cr.X.T))
+        _S, _U = LA.eigh(self.covar.Cn.K()); _S[_S<0] = 0
+        Cn_h = _U*_S**0.5
+        Yn = sp.dot(sp.randn(*self.mean.Y.shape), Cn_h.T)
+        RV = Yc+Yr+Yn
+        return RV
+    

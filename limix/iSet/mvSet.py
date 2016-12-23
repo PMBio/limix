@@ -3,7 +3,6 @@ import limix
 from limix.core.covar import LowRankCov
 from limix.core.covar import FixedCov
 from limix.core.covar import FreeFormCov
-from limix.core.covar.mockcovar import MockCov
 from limix.core.gp import GP2KronSumLR
 from limix.core.gp import GP2KronSum
 import scipy as sp
@@ -139,53 +138,6 @@ class MvSetTest():
             mvset0 = MvSetTest(Y=_Y, F=self.F, Xr=self.Xr, Rr=self.Rr)
             LLR0[ni] = mvset0.gxehet()
         return LLR0
-
-    def score(self, test, null=False):
-        ntype = ntype_dict[test]
-        if null:
-            if ntype=='null':
-                idx_perms = sp.random.permutation(self.Y.shape[0])
-                _Xr = self.Xr[idx_perms] 
-                _Y = self.Y
-            else:
-                _Xr = self.Xr
-                _Y = self.gp[ntype].simulate_pheno()
-        else:
-            _Xr = self.Xr
-            _Y = self.Y
-        # define mock gp
-        _A = sp.eye(self.Y.shape[1])
-        if type=='null':
-            _Cr = MockCov(sp.zeros((2,2)))
-        else:
-            _Cr = MockCov(self.gp[ntype].covar.Cr.K())
-        _Cn = limix.core.covar.FreeFormCov(self.Y.shape[1], jitter=0.)
-        _Cn.setCovariance(self.gp[ntype].covar.Cn.K())
-        gp = GP2KronSumLR(Y=_Y,G=_Xr,F=self.F,A=_A,Cr=_Cr,Cn=_Cn)
-        SSS = -gp.LML_grad()['covar'][:3]/sp.sqrt(self.Y.size)
-        # here you might want to calculate the hessian (see code below)
-        ts0 = (SSS**2).sum()
-        # The following part should be replace by
-        # an available semidefinite programming optimiser
-        C = FreeFormCov(2)
-        def f2(x):
-            C.setParams(x)
-            b = C.K()[sp.tril_indices(2)]
-            val = ((b-SSS)**2).sum()
-            db_dx0 = C.K_grad_i(0)[sp.tril_indices(2)]
-            db_dx1 = C.K_grad_i(1)[sp.tril_indices(2)]
-            db_dx2 = C.K_grad_i(2)[sp.tril_indices(2)]
-            grad = 2*sp.array([((b-SSS)*db_dx0).sum(),
-                                ((b-SSS)*db_dx1).sum(), 
-                                ((b-SSS)*db_dx2).sum()])
-            return val, grad 
-        x_opt, dts, _info = sp.optimize.fmin_l_bfgs_b(f2, sp.randn(3))
-        conv = (_info['grad']**2).mean()<1e-5
-        ts = ts0-dts
-        info = {'grad': SSS, 'ts0': sp.array([ts0]),
-                'dts': sp.array([dts]), 'conv':sp.array([conv])}
-        return ts, info
-
 
     def _fit(self, type, vc=False):
         #2. init

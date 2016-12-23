@@ -3,7 +3,6 @@ import limix
 from limix.core.covar import LowRankCov
 from limix.core.covar import FixedCov
 from limix.core.covar import FreeFormCov
-from limix.core.covar.mockcovar import MockCov
 from limix.core.gp import GP3KronSumLR
 from limix.core.gp import GP2KronSum
 import scipy as sp

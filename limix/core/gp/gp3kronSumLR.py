@@ -147,3 +147,23 @@ class GP3KronSumLR(GP2KronSum):
     @cached(['row_cov', 'col_cov', 'designs', 'pheno'])
     def yKiWb_grad_i(self,i):
         pass
+
+    ############################
+    # Simulate
+    ############################
+    def simulate_pheno(self):
+        #region
+        Z = sp.randn(self.covar.G.shape[1], self.covar.Cr.X.shape[1])
+        Yr = sp.dot(self.covar.G, sp.dot(Z, self.covar.Cr.X.T))
+        # background
+        _S, _U = la.eigh(self.covar.Cg.K()); _S[_S<0] = 0
+        Cg_h = _U*_S**0.5
+        Rg_h = self.covar.Lr().T*(self.covar.Sr()**0.5)
+        Yg = sp.dot(Rg_h, sp.dot(sp.randn(*self.mean.Y.shape), Cg_h.T))
+        # noise
+        _S, _U = la.eigh(self.covar.Cn.K()); _S[_S<0] = 0
+        Cn_h = _U*_S**0.5
+        Yn = sp.dot(sp.randn(*self.mean.Y.shape), Cn_h.T)
+        RV = Yr+Yg+Yn
+        return RV
+

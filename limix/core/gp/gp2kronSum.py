@@ -198,3 +198,21 @@ class GP2KronSum(GP):
         rv = -2*(self.DLrYLc()*self.Sr_vei_dLWb_Ctilde(i)).sum()
         rv+= (self.vei_dLWb()*self.Sr_vei_dLWb_Ctilde(i)).sum()
         return rv
+
+    ############################
+    # Simulate
+    ############################
+    def simulate_pheno(self, Rh=None):
+        if Rh is None:
+            S, U = la.eigh(self.covar.R)
+            S[S<0] = 0
+            Rh = U*S**(0.5)
+        Yc = sp.dot(self.mean.F[0], sp.dot(self.mean.B[0], self.mean.A[0].T))
+        Z = sp.randn(Rh.shape[1], self.covar.Cr.X.shape[1])
+        Yr = sp.dot(Rh, sp.dot(Z, self.covar.Cr.X.T))
+        _S, _U = LA.eigh(self.covar.Cn.K()); _S[_S<0] = 0
+        Cn_h = _U*_S**0.5
+        Yn = sp.dot(sp.randn(*self.mean.Y.shape), Cn_h.T)
+        RV = Yc+Yr+Yn
+        return RV
+
