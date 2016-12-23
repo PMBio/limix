@@ -5,7 +5,7 @@
 import time
 import sys
 import os
-from limix.mtSet.iset import fit_iSet
+from limix.iSet.iset import fit_iSet
 from optparse import OptionParser
 import numpy as np
 import pandas as pd
@@ -22,13 +22,12 @@ from ..mtSet.core import plink_reader
 def entry_point():
     parser = OptionParser()
     parser.add_option("--bfile", dest='bfile', type=str, default=None)
-    parser.add_option("--cfile", dest='cfile', type=str, default=None)
+    #parser.add_option("--cfile", dest='cfile', type=str, default=None)
     parser.add_option("--pfile", dest='pfile', type=str, default=None)
     parser.add_option("--wfile", dest='wfile', type=str, default=None)
     parser.add_option("--ffile", dest='ffile', type=str, default=None)
     parser.add_option("--ifile", dest='ifile', type=str, default=None)
     parser.add_option("--resdir", dest='resdir', type=str, default='./')
-    parser.add_option("--trait_idx",dest='trait_idx',type=str, default=None)
 
     # start window, end window and permutations
     parser.add_option("--minSnps", dest='minSnps', type=int, default=4)
@@ -40,15 +39,9 @@ def entry_point():
     (options, args) = parser.parse_args()
 
     print('importing data')
-    if options.cfile is None:
-        import warnings
-        cov = {'eval':None, 'evec':None}
-        warnings.warn('warning: cfile not specifed, a one variance compoenent'+
-                      ' model will be considered')
-    else:
-        cov = readCovarianceMatrixFile(options.cfile, readCov=False)
-
-    Y = readPhenoFile(options.pfile,idx=options.trait_idx)
+    F = sp.loadtxt(options.ffile+'.fe')
+    Y = sp.loadtxt(options.pfile+'.phe')
+    if len(Y.shape)==1: Y = Y[:,sp.newaxis]
 
     wnds = readWindowsFile(options.wfile)
 
@@ -62,20 +55,13 @@ def entry_point():
 
     df = pd.DataFrame()
     df0 = pd.DataFrame()
-    t0 = time.time()
-
-    S_R = cov['eval']
-    U_R = cov['evec']
 
     if options.ifile is None:
-        strat = False
+        Ie = None
     else:
-        strat = True
-        print(".. loading indicator file %s " % options.ifile)
-        Ie = np.asarray(pd.read_csv(options.ifile, index_col=0)).flatten()
-        covs = sp.concatenate([U_R[:,-10:], sp.ones([U_R.shape[0], 1])], 1)
+        Ie = sp.loadtxt(options.ifile+'.ind').flatten()==1
 
-    res_dir = os.path.join(options.resdir,'test')
+    res_dir = options.resdir
 
     if not os.path.exists(res_dir):
         os.makedirs(res_dir)
@@ -86,32 +72,23 @@ def entry_point():
     resfile = os.path.join(res_dir, fname)
 
     for wnd_i in range(i0,i1):
+        t0 = time.time()
         print(('.. window %d - (%d, %d-%d) - %d snps'%(wnd_i,int(wnds[wnd_i,1]),int(wnds[wnd_i,2]),int(wnds[wnd_i,3]),int(wnds[wnd_i,-1]))))
-        if int(wnds[wnd_i,-1])<options.minSnps:
-            print('SKIPPED: number of snps lower than minSnps')
-            continue
         Xr = plink_reader.readBED(options.bfile, useMAFencoding=True, start = int(wnds[wnd_i,4]), nSNPs = int(wnds[wnd_i,5]), bim=bim , fam=fam)['snps']
         Xr = np.ascontiguousarray(Xr)
+        xr = sp.dot(sp.rand(Xr.shape[0]), Xr)
+        idxs_u = sp.sort(sp.unique(xr, return_index=True)[1])
+        if idxs_u.shape[0]<options.minSnps:
+            print('SKIPPED: number of snps lower than minSnps')
+            continue
+        Xr = Xr[:,idxs_u]
         Xr-= Xr.mean(0)
         Xr/= Xr.std(0)
         Xr/= np.sqrt(Xr.shape[1])
-
-        if strat:
-            _df, _df0 = fit_iSet(Y[:,[0]], Xr=Xr, covs=covs,
-                                 n_perms=options.n_perms, Ie=Ie, strat=strat)
-        else:
-            _df, _df0 = fit_iSet(Y, U_R=U_R, S_R=S_R, Xr=Xr,
-                                 n_perms=options.n_perms, strat=strat)
-
-        _df.index = [wnd_i]
-        _df.index.name = 'window'
-
-        _df0.index = ['%d_%d' % (wnd_i, perm) for perm in range(_df0.shape[0])]
-        _df0.index.name = 'window_perm'
-
-        df = df.append(_df)
+        _df, _df0 = fit_iSet(Y, F=F, Xr=Xr, Ie=Ie, n_nulls=10)
+        df  = df.append(_df)
         df0 = df0.append(_df0)
-    print 'Elapsed:', time.time()-t0
+        print 'Elapsed:', time.time()-t0
 
     df.to_csv(resfile + '.iSet.real')
     df0.to_csv(resfile + '.iSet.perm')
