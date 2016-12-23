@@ -25,7 +25,7 @@ def entry_point():
     tol = options.tol
 
     print('.. load permutation results')
-    file_name = os.path.join(resdir, 'test', '*.iSet.perm')
+    file_name = os.path.join(resdir, '*.iSet.perm')
     files = glob.glob(file_name)
     df0 = pd.DataFrame()
     for _file in files:
@@ -33,7 +33,7 @@ def entry_point():
         df0 = df0.append(pd.read_csv(_file, index_col=0))
 
     print('.. load real results')
-    file_name = os.path.join(resdir, 'test', '*.iSet.real')
+    file_name = os.path.join(resdir, '*.iSet.real')
     files = glob.glob(file_name)
     df = pd.DataFrame()
     for _file in files:
