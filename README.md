@@ -8,6 +8,8 @@ to Python. Genomic analyses require flexible models that can be adapted to the n
 the user. Limix is smart about how particular models are fitted to save
 computational cost.
 
+LATEST: [iSet, interaction set tests for gene-context interactions, is now in Limix.](https://github.com/PMBio/limix-tutorials/tree/master/iSet)
+
 ## Installation
 
 ### Using Conda package manager
