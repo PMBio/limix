@@ -1,3 +1,6 @@
+include LICENSE
+include README.md
+include setup.cfg
 recursive-include External/Eigen *
 recursive-include External/nlopt *
 include External/nlopt_src.files
