@@ -2,7 +2,7 @@
 // All rights reserved.
 //
 // LIMIX is provided under a 2-clause BSD license.
-// See license.txt for the complete license.
+// See LICENSE for the complete license.
 
 #ifndef FREEFORM_H_
 #define FREEFORM_H_

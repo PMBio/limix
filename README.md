@@ -1,4 +1,4 @@
-[![Travis branch](https://img.shields.io/travis/PMBio/limix/master.svg?style=flat-square&label=build%20(osx))](https://travis-ci.org/PMBio/limix) [![Codeship branch](https://img.shields.io/codeship/f2481f10-de6f-0133-67ee-4612197ec823/master.svg?style=flat-square&label=build%20(linux))](https://codeship.com/projects/144764) [![Release](https://img.shields.io/github/release/PMBio/limix.svg?style=flat-square&label=release%20(github))](https://github.com/PMBio/limix/releases/latest) [![PyPI](https://img.shields.io/pypi/v/limix.svg?style=flat-square&label=release%20(pypi))](https://pypi.python.org/pypi/limix/) [![Conda](https://anaconda.org/horta/limix/badges/version.svg)](https://anaconda.org/horta/limix) [![License](http://img.shields.io/:license-apache-blue.svg?style=flat-square)](https://github.com/PMBio/limix/blob/master/LICENSE.txt)
+[![Travis branch](https://img.shields.io/travis/PMBio/limix/master.svg?style=flat-square&label=build%20(osx))](https://travis-ci.org/PMBio/limix) [![Release](https://img.shields.io/github/release/PMBio/limix.svg?style=flat-square&label=release%20(github))](https://github.com/PMBio/limix/releases/latest) [![PyPI](https://img.shields.io/pypi/v/limix.svg?style=flat-square&label=release%20(pypi))](https://pypi.python.org/pypi/limix/ [![Conda](https://anaconda.org/horta/limix/badges/version.svg)](https://anaconda.org/horta/limix) [![License](http://img.shields.io/:license-apache-blue.svg?style=flat-square)](https://github.com/PMBio/limix/blob/master/LICENSE)
 
 Limix
 =====
@@ -85,4 +85,4 @@ If you want to use Limix and encounter any issues, please contact us via `limix@
 
 ## License
 
-See [Apache License (Version 2.0, January 2004)](https://github.com/PMBio/limix/blob/master/LICENSE.txt).
+See [Apache License (Version 2.0, January 2004)](https://github.com/PMBio/limix/blob/master/LICENSE).

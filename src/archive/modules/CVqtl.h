@@ -2,7 +2,7 @@
 // All rights reserved.
 //
 // LIMIX is provided under a 2-clause BSD license.
-// See license.txt for the complete license.
+// See LICENSE for the complete license.
 
 #ifndef CVQTL_H_
 #define CVQTL_H_

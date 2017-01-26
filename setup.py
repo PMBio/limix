@@ -5,7 +5,7 @@ import sys
 import importlib
 
 PKG_NAME = 'limix'
-VERSION  = '0.8.0.dev1'
+VERSION  = '0.8.0.dev2'
 
 WORKDIR = os.path.abspath(os.path.dirname(__file__))
 
@@ -309,21 +309,10 @@ def setup_package(reswig, yes, compatible):
             'Intended Audience :: Science/Research',
             'License :: OSI Approved :: Apache Software License',
             'Natural Language :: English',
-            'Operating System :: MacOS',
-            'Operating System :: Unix',
             'Programming Language :: Python :: 2.7',
-            'Programming Language :: Python :: 3.4',
             'Topic :: Scientific/Engineering :: Bio-Informatics',
         ],
     )
-
-    try:
-        from distutils.command.bdist_conda import CondaDistribution
-        metadata['distclass'] = CondaDistribution
-        metadata['conda_buildnum'] = 1
-        metadata['conda_features'] = ['mkl']
-    except ImportError:
-        pass
 
     # http://stackoverflow.com/a/29634231
     import distutils.sysconfig

@@ -34,4 +34,4 @@ requirements:
 about:
   home: https://github.com/PMBio/limix
   license: Apache License
-  license_file: license.txt
+  license_file: LICENSE
