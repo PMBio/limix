@@ -7,6 +7,7 @@ matrix:
   include:
   - python: 2.7
 before_install:
+- pip install Cython
 - travis/install_pandoc.sh
 script:
 - python setup.py sdist

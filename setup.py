@@ -7,7 +7,7 @@ from os.path import join
 from setuptools import find_packages, setup
 from setuptools.extension import Extension
 
-from Cython.Build import cythonize
+
 from Cython.Distutils import build_ext
 
 try:
@@ -135,6 +135,7 @@ def ensemble_extension():
                     include_dirs=incl,
                     extra_compile_args=extra_compile_args(),
                     depends=depends)
+    from Cython.Build import cythonize
     return cythonize(ext)
 
 def setup_package(reswig, compatible):
