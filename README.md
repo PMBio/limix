@@ -1,7 +1,9 @@
-[![Travis branch](https://img.shields.io/travis/PMBio/limix/master.svg?style=flat-square&label=build%20(osx))](https://travis-ci.org/PMBio/limix) [![Release](https://img.shields.io/github/release/PMBio/limix.svg?style=flat-square&label=release%20(github))](https://github.com/PMBio/limix/releases/latest) [![PyPI](https://img.shields.io/pypi/v/limix.svg?style=flat-square&label=release%20(pypi))](https://pypi.python.org/pypi/limix/ [![Conda](https://anaconda.org/horta/limix/badges/version.svg)](https://anaconda.org/horta/limix) [![License](http://img.shields.io/:license-apache-blue.svg?style=flat-square)](https://github.com/PMBio/limix/blob/master/LICENSE)
+# Limix
 
-Limix
-=====
+[![PyPIl](https://img.shields.io/pypi/l/limix.svg?style=flat-square)](https://pypi.python.org/pypi/limix/)
+[![PyPIv](https://img.shields.io/pypi/v/limix.svg?style=flat-square)](https://pypi.python.org/pypi/limix/)
+[![Anaconda-Server Badge](https://anaconda.org/conda-forge/limix/badges/version.svg)](https://anaconda.org/conda-forge/limix)
+
 
 Limix is a flexible and efficient linear mixed model library with interfaces
 to Python. Genomic analyses require flexible models that can be adapted to the needs of
