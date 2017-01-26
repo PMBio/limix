@@ -7,3 +7,5 @@ include External/nlopt_src.files
 recursive-include src/limix *.cpp *.h
 recursive-include src/interfaces *.cpp *.txt *.i *.py
 recursive-include cython/lmm_forest *
+include limix/test/lmm_forest/test_data/lmm_forest_toy_data.h5
+recursive-include limix/test/ *.txt
