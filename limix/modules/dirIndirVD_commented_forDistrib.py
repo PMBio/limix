@@ -159,7 +159,7 @@ class DirIndirVD():
         if standardize_pheno:
             pheno -= pheno.mean(0)
             pheno /= pheno.std(0)
-            print 'Pheno has been standardized'
+            print('Pheno has been standardized')
 
         if independent_covs:
             tol = 1e-6
@@ -444,7 +444,7 @@ class DirIndirVD():
         S = S[I]
         FI = sp.dot(U,sp.dot(sp.diag(S**(-1)),U.T))
         # reorder to have same ordering as before
-        idxs = range(1, aP.shape[0])
+        idxs = list(range(1, aP.shape[0]))
         idxs.append(0)
         FI = FI[idxs, :][:, idxs]
         # R is 2x2 matrix: STE_Ad and STE_As on diag, STE_Ads off

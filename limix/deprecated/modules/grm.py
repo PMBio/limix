@@ -67,7 +67,7 @@ if __name__ == '__main__':
     # r = apply_gcta(nfrX, nbgX, y, 0.5)
 
     K = grm_unbiased(nbgX)
-    print(np.diagonal(K))
+    print((np.diagonal(K)))
     # diag 0.8817461 0.9085317 0.6531746 1.2656746 0.5007936
     # print np.mean([0.8817461, 0.9085317, 0.6531746, 1.2656746, 0.5007936])
 

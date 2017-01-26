@@ -302,7 +302,7 @@ if __name__=='__main__':
     y = sp.randn(N, 1)
     Kiy1 = C.solve(y)
     Kiy2 = sp.dot(C.inv(), y)
-    print(((Kiy1-Kiy2)**2).mean())
+    print((((Kiy1-Kiy2)**2).mean()))
 
     # logdet
     ld1 = C.logdet()

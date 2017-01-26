@@ -17,8 +17,8 @@ from limix.utils.preprocess import gaussianize
 from scipy.optimize import fmin
 import time
 import pandas as pd
-from linalg_utils import msqrt
-from linalg_utils import lowrank_approx
+from .linalg_utils import msqrt
+from .linalg_utils import lowrank_approx
 
 ntype_dict = {'assoc':'null', 'gxe':'block', 'gxehet':'rank1'}
 
@@ -29,7 +29,7 @@ def define_gp(Y, Xr, F, type, Rr):
     if type in ['null', 'rank1']:   _Cr = limix.core.covar.LowRankCov(P,1)
     elif type=='block':             _Cr = limix.core.covar.FixedCov(sp.ones((P,P)))
     elif type=='full':              _Cr = limix.core.covar.FreeFormCov(P)
-    else:                           print 'poppo'
+    else:                           print('poppo')
     _Cn = limix.core.covar.FreeFormCov(P)
     if type=='null':
         _gp = GP2KronSumLR(Y=Y,G=sp.ones((Y.shape[0],1)),F=F,A=_A,Cr=_Cr,Cn=_Cn)
@@ -77,10 +77,10 @@ class MvSetTest():
     def assoc(self):
         # fit model 
         for key in ['null', 'full']:
-            if key not in self.gp.keys():
-                if self.debug:      print '.. dening %s' % key
+            if key not in list(self.gp.keys()):
+                if self.debug:      print('.. dening %s' % key)
                 self.gp[key] = define_gp(self.Y, self.Xr, self.F, key, Rr=self.Rr)
-                if self.debug:      print '.. fitting %s' % key
+                if self.debug:      print('.. fitting %s' % key)
                 self.info[key] = self._fit(key, vc=True)
                 #if key=='full':
                 #    print self.info[key]['var'][0]
@@ -89,20 +89,20 @@ class MvSetTest():
     def gxe(self):
         # fit model 
         for key in ['null', 'full', 'block']:
-            if key not in self.gp.keys():
-                if self.debug:      print '.. defining %s' % key
+            if key not in list(self.gp.keys()):
+                if self.debug:      print('.. defining %s' % key)
                 self.gp[key] = define_gp(self.Y, self.Xr, self.F, key, Rr=self.Rr)
-                if self.debug:      print '.. fitting %s' % key
+                if self.debug:      print('.. fitting %s' % key)
                 self.info[key] = self._fit(key, vc=True)
         return self.info['block']['LML']-self.info['full']['LML']
 
     def gxehet(self):
         # fit model
         for key in ['null', 'full', 'rank1']:
-            if key not in self.gp.keys():
-                if self.debug:      print '.. defining %s' % key
+            if key not in list(self.gp.keys()):
+                if self.debug:      print('.. defining %s' % key)
                 self.gp[key] = define_gp(self.Y, self.Xr, self.F, key, Rr=self.Rr)
-                if self.debug:      print '.. fitting %s' % key
+                if self.debug:      print('.. fitting %s' % key)
                 self.info[key] = self._fit(key, vc=True)
         return self.info['rank1']['LML']-self.info['full']['LML']
 
@@ -159,7 +159,7 @@ class MvSetTest():
             self.gp[type].covar.Cr.setCovariance(Crf_K)
             self.gp[type].covar.Cn.setCovariance(Cnf_K)
         else:
-            print 'poppo'
+            print('poppo')
         self.gp[type].optimize(factr=self.factr, verbose=False)
         RV = {'Cr': self.gp[type].covar.Cr.K(),      
                 'Cn': self.gp[type].covar.Cn.K(),
@@ -183,7 +183,7 @@ class MvSetTest():
                 _var_r = sp.trace(Kr-Kr.mean(0)) / float(self.Y.size-1)
                 _var_n = sp.trace(Kn-Kn.mean(0)) / float(self.Y.size-1)
                 _var = sp.array([_var_r, var_c, _var_n])
-                print ((_var-RV['var'])**2).mean()
+                print(((_var-RV['var'])**2).mean())
             if type=='full':
                 # calculate within region vcs 
                 Cr_block = sp.mean(RV['Cr']) * sp.ones(RV['Cr'].shape)
@@ -243,13 +243,13 @@ if __name__=='__main__':
         mvset = MvSetTest(Y=Y, Xr=Xr, F=F, factr=1e7)
         mvset.assoc()
         mvset.gxehet()
-        print '.. permutations'
+        print('.. permutations')
         mvset.assoc_null()
-        print '.. bootstrap gxe'
+        print('.. bootstrap gxe')
         mvset.gxe_null()
-        print '.. bootstrap gxehet'
+        print('.. bootstrap gxehet')
         mvset.gxehet_null()
-        print time.time()-t0
+        print(time.time()-t0)
 
         pdb.set_trace()
 
@@ -264,7 +264,7 @@ if __name__=='__main__':
         score_gxehet = sp.zeros(n_times)
 
         for time_i in range(n_times):
-            print time_i
+            print(time_i)
 
             N = 10000
             P = 2
@@ -281,13 +281,13 @@ if __name__=='__main__':
             LLR_assoc[time_i] = mvset.assoc()
             LLR_gxe[time_i] = mvset.gxe()
             LLR_gxehet[time_i] = mvset.gxehet()
-            print time.time()-t0
+            print(time.time()-t0)
 
             t0 = time.time()
             score_assoc[time_i], _ = mvset.score(test='assoc')
             score_gxe[time_i], _ = mvset.score(test='gxe')
             score_gxehet[time_i], _ = mvset.score(test='gxehet')
-            print time.time()-t0
+            print(time.time()-t0)
 
         t0 = time.time()
         pdb.set_trace()
@@ -311,7 +311,7 @@ if __name__=='__main__':
         score_gxehet = sp.zeros(n_times)
         score0_gxehet = sp.zeros(n_times)
         for time_i in range(n_times):
-            print time_i
+            print(time_i)
             N = 10000
             P = 2
             S = 20
@@ -410,6 +410,6 @@ if __name__=='__main__':
         x_opt, dscore1, info = sp.optimize.fmin_l_bfgs_b(f1, sp.randn(3))
         conv[time_i] = (info['grad']**2).mean()<1e-5
         score1c[time_i] = score1[time_i]-dscore1
-        print time.time()-t0
+        print(time.time()-t0)
 
 

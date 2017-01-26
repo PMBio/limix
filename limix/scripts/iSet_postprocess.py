@@ -45,7 +45,7 @@ def entry_point():
         df[test+' pv'] = calc_emp_pv_eff(df[test+' LLR'].values,
                                          df0[test+' LLR0'].values)
 
-    print('.. saving %s' % out_file+'.res')
+    print(('.. saving %s' % out_file+'.res'))
     df.to_csv(out_file+'.res')
 
     if 0:
@@ -67,5 +67,5 @@ def entry_point():
                 out_file = os.path.join(options.outfile,
                                         'iSet.%s_pv.manhattan.png'\
                                         % (test,))
-                print(".. saving " + out_file)
+                print((".. saving " + out_file))
                 plot_manhattan(df['%s pv' % test].values, out_file)

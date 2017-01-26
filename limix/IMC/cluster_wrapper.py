@@ -3,7 +3,7 @@ __author__ = 'damienarnol1'
 import numpy as np
 import os
 import glob
-import util_functions
+from . import util_functions
 import shutil
 import subprocess
 
@@ -50,7 +50,7 @@ def create_analysis_tree(position_dir, expressions_dir, analysis_dir):
     # reading and creating tree
     for image_index in range(0, len(position_names)):
         if position_names[image_index] != expression_names[image_index]:
-            print position_names[image_index] + 'is not equal to ' + expression_names[image_index]
+            print(position_names[image_index] + 'is not equal to ' + expression_names[image_index])
             raise Exception("Image names dont match for position and expression data")
 
         # create image directory

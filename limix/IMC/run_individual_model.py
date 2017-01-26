@@ -110,7 +110,7 @@ def run_individual_model(model, expression_file, position_file, output_directory
         try:
             gp.optimize()
         except:
-            print 'optimisation', str(phen), 'failed'
+            print('optimisation', str(phen), 'failed')
             continue
 
         log_lik[phen] = gp.LML()

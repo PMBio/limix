@@ -88,7 +88,7 @@ def entry_point():
         _df, _df0 = fit_iSet(Y, F=F, Xr=Xr, Ie=Ie, n_nulls=10)
         df  = df.append(_df)
         df0 = df0.append(_df0)
-        print 'Elapsed:', time.time()-t0
+        print('Elapsed:', time.time()-t0)
 
     df.to_csv(resfile + '.iSet.real')
     df0.to_csv(resfile + '.iSet.perm')

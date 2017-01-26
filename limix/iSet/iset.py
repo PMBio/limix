@@ -1,6 +1,6 @@
-from mvSet import MvSetTest
-from mvSetFull import MvSetTestFull
-from mvSetInc import MvSetTestInc
+from .mvSet import MvSetTest
+from .mvSetFull import MvSetTestFull
+from .mvSetInc import MvSetTestInc
 import pandas as pd
 
 def fit_iSet(Y=None, Xr=None, F=None, Rr=None, factr=1e7, Rg=None, Ug=None, Sg=None, Ie=None, n_nulls=10):

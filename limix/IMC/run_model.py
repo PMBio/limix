@@ -86,9 +86,9 @@ for image in range(0, 5):
         #######################################################################
         # MODEL 1: all
         #######################################################################
-        print '...........................................................'
-        print 'model 1 : complete model '
-        print '...........................................................'
+        print('...........................................................')
+        print('model 1 : complete model ')
+        print('...........................................................')
         # total cov and mean
         cov = SumCov(direct_cov, noise_cov)
         cov = SumCov(cov, local_noise_cov)
@@ -114,7 +114,7 @@ for image in range(0, 5):
         try:
             gp.optimize()
         except:
-            print 'optimisation', str(phen), 'failed'
+            print('optimisation', str(phen), 'failed')
             continue
 
         # rescale each terms to sample variance one
@@ -128,13 +128,13 @@ for image in range(0, 5):
 
 
         # show results
-        print "inferred parameters "
-        print "direct_scale = ", " ", direct_cov.scale
-        print "noise_scale = ", " ", noise_cov.scale
-        print "local_noise_scale = ", " ", local_noise_cov.scale
-        print "local_noise_length = ", " ", local_noise_cov.length
-        print "environment_scale = ", " ", environment_cov.scale
-        print "environment_length = ", " ", environment_cov.length
+        print("inferred parameters ")
+        print("direct_scale = ", " ", direct_cov.scale)
+        print("noise_scale = ", " ", noise_cov.scale)
+        print("local_noise_scale = ", " ", local_noise_cov.scale)
+        print("local_noise_length = ", " ", local_noise_cov.length)
+        print("environment_scale = ", " ", environment_cov.scale)
+        print("environment_length = ", " ", environment_cov.length)
 
         parameters[phen, :] = [direct_cov.scale,
                                noise_cov.scale,

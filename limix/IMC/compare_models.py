@@ -61,9 +61,9 @@ mean = MeanBase(phenotype)
 #######################################################################
 # MODEL 1: all
 #######################################################################
-print '...........................................................'
-print 'model 1 : complete model '
-print '...........................................................'
+print('...........................................................')
+print('model 1 : complete model ')
+print('...........................................................')
 # total cov and mean
 cov = SumCov(direct_cov, noise_cov)
 cov = SumCov(cov, local_noise_cov)
@@ -81,20 +81,20 @@ gp = GP(covar=cov, mean=mean)
 gp.optimize()
 
 # show results
-print "inferred parameters "
-print "direct_scale = ", " ", direct_cov.scale
-print "noise_scale = ", " ", noise_cov.scale
-print "local_noise_scale = ", " ", local_noise_cov.scale
-print "local_noise_length = ", " ", local_noise_cov.length
-print "environment_scale = ", " ", environment_cov.scale
-print "environment_length = ", " ", environment_cov.length
+print("inferred parameters ")
+print("direct_scale = ", " ", direct_cov.scale)
+print("noise_scale = ", " ", noise_cov.scale)
+print("local_noise_scale = ", " ", local_noise_cov.scale)
+print("local_noise_length = ", " ", local_noise_cov.length)
+print("environment_scale = ", " ", environment_cov.scale)
+print("environment_length = ", " ", environment_cov.length)
 
 #######################################################################
 # MODEL 2: no social effect
 #######################################################################
-print '...........................................................'
-print 'model 2: no social effect'
-print '...........................................................'
+print('...........................................................')
+print('model 2: no social effect')
+print('...........................................................')
 
 direct_cov2 = FixedCov(Kinship)
 
@@ -114,18 +114,18 @@ gp2 = GP(covar=cov2, mean=mean)
 gp2.optimize()
 
 # show results
-print "inferred parameters "
-print "direct_scale = ", " ", direct_cov2.scale
-print "noise_scale = ", " ", noise_cov2.scale
-print "local_noise_scale = ", " ", local_noise_cov2.scale
-print "local_noise_length = ", " ", local_noise_cov2.length
+print("inferred parameters ")
+print("direct_scale = ", " ", direct_cov2.scale)
+print("noise_scale = ", " ", noise_cov2.scale)
+print("local_noise_scale = ", " ", local_noise_cov2.scale)
+print("local_noise_length = ", " ", local_noise_cov2.length)
 
 #######################################################################
 # MODEL 3: no local moise no social effect
 #######################################################################
-print '...........................................................'
-print 'model 3: no local noise, no social effect'
-print '...........................................................'
+print('...........................................................')
+print('model 3: no local noise, no social effect')
+print('...........................................................')
 direct_cov3 = FixedCov(Kinship)
 
 # noise
@@ -140,16 +140,16 @@ gp3 = GP(covar=cov3, mean=mean)
 gp3.optimize()
 
 # show results
-print "inferred parameters "
-print "direct_scale = ", " ", direct_cov3.scale
-print "noise_scale = ", " ", noise_cov3.scale
+print("inferred parameters ")
+print("direct_scale = ", " ", direct_cov3.scale)
+print("noise_scale = ", " ", noise_cov3.scale)
 
 #######################################################################
 # MODEL 4: no local moise but social effect ON
 #######################################################################
-print '...........................................................'
-print 'model 3: no local noise, social effects ON'
-print '...........................................................'
+print('...........................................................')
+print('model 3: no local noise, social effects ON')
+print('...........................................................')
 direct_cov4 = FixedCov(Kinship)
 
 # noise
@@ -166,8 +166,8 @@ gp4 = GP(covar=cov4, mean=mean)
 gp4.optimize()
 
 # show results
-print "inferred parameters "
-print "direct_scale = ", " ", direct_cov4.scale
-print "noise_scale = ", " ", noise_cov4.scale
-print "environment_scale = ", " ", environment_cov4.scale
-print "environment_length = ", " ", environment_cov4.length
+print("inferred parameters ")
+print("direct_scale = ", " ", direct_cov4.scale)
+print("noise_scale = ", " ", noise_cov4.scale)
+print("environment_scale = ", " ", environment_cov4.scale)
+print("environment_length = ", " ", environment_cov4.length)

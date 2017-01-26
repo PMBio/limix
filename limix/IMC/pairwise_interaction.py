@@ -103,7 +103,7 @@ def compute_pairwise_interaction(model, expression_file, position_file, output_f
     try:
         gp.optimize()
     except:
-        print 'optimisation', str(phen), 'failed'
+        print('optimisation', str(phen), 'failed')
 
     # log_lik[phen] = gp.LML()
 

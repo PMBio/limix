@@ -1,7 +1,7 @@
 __author__ = 'damienarnol1'
 
-import util_functions
-from run_individual_model import run_individual_model
+from . import util_functions
+from .run_individual_model import run_individual_model
 import sys
 
 

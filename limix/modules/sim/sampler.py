@@ -204,7 +204,7 @@ class BernoulliTraitSampler(TraitSampler):
 
         (_, z) = self._sample_traits_once(var_noise, 0.)
         offset = np.percentile(z, 100. * (1-prevalence))
-        print("Calculated offset: %.3f" % offset)
+        print(("Calculated offset: %.3f" % offset))
         return offset
 
     def _sample_traits_once(self, var_noise, offset):
@@ -217,8 +217,8 @@ class BernoulliTraitSampler(TraitSampler):
         return (y, z)
 
     def sample_traits(self, pop_size, var_noise, prevalence=0.5, ascertainment=0.5):
-        print("Prevalence: %.3f." % prevalence)
-        print("Ascertainment: %.3f." % ascertainment)
+        print(("Prevalence: %.3f." % prevalence))
+        print(("Ascertainment: %.3f." % ascertainment))
         offset = self._offset_due_prevalence(var_noise, prevalence)
 
         print("Sampling traits...")

@@ -18,8 +18,8 @@ from limix.utils.preprocess import gaussianize
 from scipy.optimize import fmin
 import time
 import pandas as pd
-from linalg_utils import msqrt
-from linalg_utils import lowrank_approx
+from .linalg_utils import msqrt
+from .linalg_utils import lowrank_approx
 
 ntype_dict = {'assoc':'null', 'gxe':'block', 'gxehet':'rank1'}
 
@@ -34,7 +34,7 @@ def define_gp(Y, Xr, mean, Ie, type):
         if type=='block':         _Cr = FixedCov(sp.ones((P,P)))
         elif type=='rank1':         _Cr = LowRankCov(P,1)
         elif type=='full':          _Cr = FreeFormCov(P)
-        else:                       print 'poppo'
+        else:                       print('poppo')
         covar = CategoricalLR(_Cr, Xr, Ie)
     _gp = GP(covar=covar, mean=mean)
     return _gp
@@ -76,30 +76,30 @@ class MvSetTestInc():
     def assoc(self):
         # fit model 
         for key in ['null', 'full']:
-            if key not in self.gp.keys():
-                if self.debug:      print '.. dening %s' % key
+            if key not in list(self.gp.keys()):
+                if self.debug:      print('.. dening %s' % key)
                 self.gp[key] = define_gp(self.Y, self.Xr, self.mean, self.Ie, key)
-                if self.debug:      print '.. fitting %s' % key
+                if self.debug:      print('.. fitting %s' % key)
                 self.info[key] = self._fit(key, vc=True)
         return self.info['null']['LML']-self.info['full']['LML']
 
     def gxe(self):
         # fit model 
         for key in ['null', 'full', 'block']:
-            if key not in self.gp.keys():
-                if self.debug:      print '.. defining %s' % key
+            if key not in list(self.gp.keys()):
+                if self.debug:      print('.. defining %s' % key)
                 self.gp[key] = define_gp(self.Y, self.Xr, self.mean, self.Ie, key)
-                if self.debug:      print '.. fitting %s' % key
+                if self.debug:      print('.. fitting %s' % key)
                 self.info[key] = self._fit(key, vc=True)
         return self.info['block']['LML']-self.info['full']['LML']
 
     def gxehet(self):
         # fit model
         for key in ['null', 'full', 'rank1']:
-            if key not in self.gp.keys():
-                if self.debug:      print '.. defining %s' % key
+            if key not in list(self.gp.keys()):
+                if self.debug:      print('.. defining %s' % key)
                 self.gp[key] = define_gp(self.Y, self.Xr, self.mean, self.Ie, key)
-                if self.debug:      print '.. fitting %s' % key
+                if self.debug:      print('.. fitting %s' % key)
                 self.info[key] = self._fit(key, vc=True)
         return self.info['rank1']['LML']-self.info['full']['LML']
 
@@ -150,7 +150,7 @@ class MvSetTestInc():
             self.gp[type].covar.Cr.setCovariance(Crf_K)
             self.gp[type].covar.Cn.setCovariance(Cnf_K)
         else:
-            print 'poppo'
+            print('poppo')
         conv = self.gp[type].optimize(factr=self.factr, verbose=False)[0]
         B = self.gp[type].mean.b.reshape((self.mean.W.shape[1]/2,2), order='F')
         RV = {'Cr': self.gp[type].covar.Cr.K(),      
@@ -178,7 +178,7 @@ class MvSetTestInc():
                 _var_r = sp.trace(Kr-Kr.mean(0)) / float(self.Y.size-1)
                 _var_n = sp.trace(Kn-Kn.mean(0)) / float(self.Y.size-1)
                 _var = sp.array([_var_r, var_c, _var_n])
-                print ((_var-RV['var'])**2).mean()
+                print(((_var-RV['var'])**2).mean())
             if type=='full':
                 trRr = (self.Xr**2).sum()
                 # calculate within region vcs 
@@ -242,13 +242,13 @@ if __name__=='__main__':
         mvset.assoc()
         mvset.gxe()
         mvset.gxehet()
-        print '.. permutations'
+        print('.. permutations')
         mvset.assoc_null()
-        print '.. bootstrap gxe'
+        print('.. bootstrap gxe')
         mvset.gxe_null()
-        print '.. bootstrap gxehet'
+        print('.. bootstrap gxehet')
         mvset.gxehet_null()
-        print time.time()-t0
+        print(time.time()-t0)
 
         pdb.set_trace()
 
