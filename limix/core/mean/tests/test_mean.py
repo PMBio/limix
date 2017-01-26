@@ -1,4 +1,3 @@
-import ipdb
 import sys
 sys.path.insert(0,'./../../..')
 from limix.core.mean import LinearMean

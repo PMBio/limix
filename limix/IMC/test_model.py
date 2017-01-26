@@ -94,7 +94,7 @@ for i in range(0, N_tests):
     try:
         gp.optimize()
     except:
-        print 'optimisation', str(i), 'failed'
+        print('optimisation', str(i), 'failed')
         continue
 
     # show results
@@ -119,7 +119,7 @@ for i in range(0, N_tests):
                                 noise_cov.scale + direct_cov.scale + local_noise_cov.scale + environment_cov.scale]
     # print 'local noise scale ', local_noise_cov.scale
 
-    print 'test', str(i), ' done '
+    print('test', str(i), ' done ')
 
 
 np.savetxt(res_true_file, results_true, delimiter=' ')

@@ -848,7 +848,7 @@ class VarianceDecomposition:
                 h2 = opt['h2']
                 var[p,:] = h2 * varY
                 var[p,self.noisPos] = (1.0-h2) * varY
-                #import ipdb;ipdb.set_trace()
+                #;ipdb.set_trace()
         else:
             if verbose:
                 print('.. random initialization of diagonal')

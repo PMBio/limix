@@ -5,8 +5,6 @@ import h5py
 import scipy as sp
 from limix.utils.preprocess import covar_rescaling_factor
 
-import pdb
-
 
 def make_sure_reasonable_conditioning(S):
     max_cond = 1e1
@@ -21,9 +19,9 @@ def make_sure_reasonable_conditioning(S):
         m = S.mean()
         S += eps
         S *= m / S.mean()
-        print 'S changed'
+        print('S changed')
     else:
-        print "S unchanged "
+        print("S unchanged ")
     return S
 
 

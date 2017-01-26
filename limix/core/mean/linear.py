@@ -1,6 +1,6 @@
 import sys
 sys.path.insert(0,'./../../..')
-from limix.core.cobj import *
+from limix.core.old.cobj import *
 from limix.utils.preprocess import regressOut
 #import scipy as SP
 import numpy as np
@@ -12,7 +12,7 @@ import copy
 import pdb
 
 def compute_X1KX2(Y, D, X1, X2, A1=None, A2=None):
-    #import ipdb; ipdb.set_trace()
+
     R,C = Y.shape
     if A1 is None:
         nW_A1 = Y.shape[1]

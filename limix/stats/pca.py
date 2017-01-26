@@ -49,7 +49,7 @@ def PCA(Y, components):
 		sv = linalg.eigh(K)
 		std_var = np.sqrt(sv[0])
 		pc = sv[1]*std_var[np.newaxis(),0]
-		#import ipdb
+		#
 		#ipdb.set_trace()
 		return [pc,std_var]
 

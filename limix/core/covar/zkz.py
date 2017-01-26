@@ -2,9 +2,9 @@ import sys
 from hcache import cached
 import scipy as sp
 import numpy as np
-from covar_base import Covariance
+from .covar_base import Covariance
 import scipy.spatial as SS
-import sqexp
+from . import sqexp
 
 
 # TODO would be cleaner to inherit from squared exponential ?

@@ -7,7 +7,7 @@ from limix.core.gp.gp3kronSumApprox import gp3kronSumApprox
 import limix.core.optimize.optimize_bfgs as OPT
 sys.path.append('./../../../build/release.darwin/interfaces/python/limix/modules')
 import varianceDecomposition as VAR
-import ipdb
+
 import h5py
 import pylab as PL
 PL.ion()

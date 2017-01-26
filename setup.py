@@ -2,11 +2,9 @@ import os
 import sys
 from os.path import join
 
+from Cython.Distutils import build_ext
 from setuptools import find_packages, setup
 from setuptools.extension import Extension
-
-
-from Cython.Distutils import build_ext
 
 try:
     import pypandoc
@@ -24,12 +22,13 @@ def _check_gcc_cpp11(cc_name):
         return False
     return True
 
+
 class build_ext_subclass(build_ext):
     def build_extensions(self):
         import platform
         from distutils import sysconfig
-        if (hasattr(self.compiler, 'compiler')
-                and len(self.compiler.compiler) > 0):
+        if (hasattr(self.compiler, 'compiler') and
+                len(self.compiler.compiler) > 0):
             cc_name = self.compiler.compiler[0]
             stdcpp = '-std=c++11'
             if 'gcc' in cc_name and not _check_gcc_cpp11(cc_name):
@@ -38,13 +37,15 @@ class build_ext_subclass(build_ext):
                 e.extra_compile_args.append(stdcpp)
 
             conf_vars = sysconfig.get_config_vars()
-            if 'MACOSX_DEPLOYMENT_TARGET' in conf_vars and len(conf_vars['MACOSX_DEPLOYMENT_TARGET']) > 0:
+            if 'MACOSX_DEPLOYMENT_TARGET' in conf_vars and len(conf_vars[
+                    'MACOSX_DEPLOYMENT_TARGET']) > 0:
                 _v1, _v2 = conf_vars['MACOSX_DEPLOYMENT_TARGET'].split('.')
-                if int(_v1)==10 and int(_v2)<9:
+                if int(_v1) == 10 and int(_v2) < 9:
                     stdcpp = '--stdlib=libc++'
                     for e in self.extensions:
                         e.extra_compile_args.append(stdcpp)
         build_ext.build_extensions(self)
+
 
 def mac_workaround(compatible):
     import platform
@@ -65,9 +66,12 @@ def mac_workaround(compatible):
 def extra_compile_args():
     if sys.platform.startswith('win'):
         return []
-    return ['-Wno-comment', '-Wno-unused-but-set-variable',
-            '-Wno-overloaded-virtual', '-Wno-uninitialized',
-            '-Wno-delete-non-virtual-dtor', '-Wunused-variable']
+    return [
+        '-Wno-comment', '-Wno-unused-but-set-variable',
+        '-Wno-overloaded-virtual', '-Wno-uninitialized',
+        '-Wno-delete-non-virtual-dtor', '-Wunused-variable'
+    ]
+
 
 def core_extension(reswig):
     import numpy as np
@@ -82,10 +86,10 @@ def core_extension(reswig):
 
         return matches
 
-
     def swig_opts():
-        return ['-c++', '-outdir', join('limix', 'deprecated'),
-                '-I'+join('src')]
+        return [
+            '-c++', '-outdir', join('limix', 'deprecated'), '-I' + join('src')
+        ]
 
     def nlopt_files():
         src = open(join('External', 'nlopt_src.files')).readlines()
@@ -114,13 +118,16 @@ def core_extension(reswig):
 
     depends = src + hdr
 
-    ext = Extension('limix.deprecated._core', src,
-                    include_dirs=incl,
-                    extra_compile_args=extra_compile_args(),
-                    swig_opts=swig_opts(),
-                    depends=depends)
+    ext = Extension(
+        'limix.deprecated._core',
+        src,
+        include_dirs=incl,
+        extra_compile_args=extra_compile_args(),
+        swig_opts=swig_opts(),
+        depends=depends)
 
     return ext
+
 
 def ensemble_extension():
     import numpy as np
@@ -128,13 +135,16 @@ def ensemble_extension():
     src = [join('cython', 'lmm_forest', 'SplittingCore.pyx')]
     incl = [join('External'), np.get_include()]
     depends = src
-    ext = Extension('limix.ensemble.SplittingCore', src,
-                    language='c++',
-                    include_dirs=incl,
-                    extra_compile_args=extra_compile_args(),
-                    depends=depends)
+    ext = Extension(
+        'limix.ensemble.SplittingCore',
+        src,
+        language='c++',
+        include_dirs=incl,
+        extra_compile_args=extra_compile_args(),
+        depends=depends)
     from Cython.Build import cythonize
     return cythonize(ext)
+
 
 def setup_package(reswig, compatible):
     src_path = os.path.dirname(os.path.abspath(sys.argv[0]))
@@ -148,9 +158,10 @@ def setup_package(reswig, compatible):
     needs_pytest = {'pytest', 'test', 'ptr'}.intersection(sys.argv)
     pytest_runner = ['pytest-runner>=2.9'] if needs_pytest else []
 
-    install_requires = ["scikit-learn", "pandas", "hcache", "scipy", "h5py",
-                        "matplotlib"]
-    setup_requires = []
+    install_requires = [
+        "scikit-learn", "pandas", "hcache", "scipy", "h5py", "matplotlib"
+    ]
+    setup_requires = [] + pytest_runner
     tests_require = ['pytest']
 
     metadata = dict(
@@ -159,7 +170,7 @@ def setup_package(reswig, compatible):
         description="A flexible and fast mixed model toolbox.",
         long_description=long_description,
         keywords='linear mixed models, GWAS, QTL, ' +
-                 'Variance component modelling',
+        'Variance component modelling',
         maintainer="Limix Developers",
         author="Christoph Lippert, Paolo Casale, Oliver Stegle",
         author_email="stegle@ebi.ac.uk",
@@ -173,7 +184,7 @@ def setup_package(reswig, compatible):
         ext_modules=[core_extension(reswig)] + ensemble_extension(),
         cmdclass=dict(build_ext=build_ext_subclass),
         entry_points={
-            'console_scripts':[
+            'console_scripts': [
                 'limix_runner=limix.scripts.limix_runner:entry_point',
                 'mtSet_postprocess=limix.scripts.mtSet_postprocess:entry_point',
                 'mtSet_preprocess=limix.scripts.mtSet_preprocess:entry_point',
@@ -192,8 +203,7 @@ def setup_package(reswig, compatible):
             'Natural Language :: English',
             'Programming Language :: Python :: 2.7',
             'Topic :: Scientific/Engineering :: Bio-Informatics',
-        ],
-    )
+        ], )
 
     # http://stackoverflow.com/a/29634231
     import distutils.sysconfig
@@ -207,6 +217,7 @@ def setup_package(reswig, compatible):
     finally:
         del sys.path[0]
         os.chdir(old_path)
+
 
 if __name__ == '__main__':
     reswig = False

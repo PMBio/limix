@@ -1,19 +1,16 @@
 import sys
-sys.path.insert(0,'./../../..')
-from limix.core.cobj import * 
+from limix.core.old.cobj import *
 from limix.utils.preprocess import regressOut
-#import scipy as SP
 import numpy as np
-		    
+
 import scipy.linalg as LA
 import copy
-import pdb
 
 def compute_X1KX2(Y, D, X1, X2, A1=None, A2=None):
-    #import ipdb; ipdb.set_trace()
+
     R,C = Y.shape
     if A1 is None:
-        nW_A1 = Y.shape[1]			
+        nW_A1 = Y.shape[1]
         #A1 = np.eye(Y.shape[1])	#for now this creates A1 and A2
     else:
         nW_A1 = A1.shape[0]
@@ -23,7 +20,7 @@ def compute_X1KX2(Y, D, X1, X2, A1=None, A2=None):
         #A2 = np.eye(Y.shape[1])	#for now this creates A1 and A2
     else:
         nW_A2 = A2.shape[0]
-        	
+
 
     nW_X1 = X1.shape[1]
     rows_block = nW_A1 * nW_X1
@@ -33,7 +30,7 @@ def compute_X1KX2(Y, D, X1, X2, A1=None, A2=None):
     else:
         nW_X2 = X2.shape[1]
     cols_block = nW_A2 * nW_X2
-    	
+
     block = np.zeros((rows_block,cols_block))
 
 
@@ -68,7 +65,7 @@ class mean(cObject):
         self.clearFixedEffect()
 
     #########################################
-    # Properties 
+    # Properties
     #########################################
 
     @property
@@ -136,7 +133,7 @@ class mean(cObject):
         return self._LCL
 
     #########################################
-    # Setters 
+    # Setters
     #########################################
     def use_identity_trick(self,identity_trick=True):
         self.identity_trick=identity_trick
@@ -150,7 +147,7 @@ class mean(cObject):
         """ erase all fixed effects """
         self._A = []
         self._F = []
-        self._B = [] 
+        self._B = []
         self._A_identity = []
         self._REML_term = []
         self._n_terms = 0
@@ -204,7 +201,7 @@ class mean(cObject):
             self.REML_term[index]=REML
             self.B[index] = np.zeros((F.shape[1],A.shape[0]))
             self._rebuild_indicator()
-        
+
         self._n_fixed_effs+=F.shape[1]*A.shape[0]
         if REML:
             self._n_fixed_effs_REML+=F.shape[1]*A.shape[0]
@@ -224,7 +221,7 @@ class mean(cObject):
         if self._n_terms==0:
             pass
         if index is None or index==(self._n_terms-1):
-            
+
             self._n_terms-=1
             F = self._F.pop() #= self.F[:-1]
             A = self._A.pop() #= self.A[:-1]
@@ -234,7 +231,7 @@ class mean(cObject):
             self._n_fixed_effs-=F.shape[1]*A.shape[0]
             if REML_term:
                 self._n_fixed_effs_REML-=F.shape[1]*A.shape[0]
-            
+
             pass
         elif index >= self.n_terms:
             raise Exception("index exceeds max index of terms")
@@ -310,14 +307,14 @@ class mean(cObject):
         RV = []
         for term_i in range(self.n_terms):
             RV.append(np.dot(self.A[term_i],self.Lc.T))
-        return RV 
+        return RV
 
     @cached
     def Fstar(self):
         RV = []
         for term_i in range(self.n_terms):
             RV.append(np.dot(self.Lr,self.F[term_i]))
-        return RV 
+        return RV
 
     def Ystar1(self):
         return np.dot(self.Lr,self.Y)
@@ -338,22 +335,22 @@ class mean(cObject):
             Ki = self.A[i].shape[0]*self.F[i].shape[1]
             RV[:,ip:ip+Ki] = np.kron(self.Astar()[i].T,self.Fstar()[i])
             ip += Ki
-        return RV 
+        return RV
 
     def var_total(self):
         return (self.Yhat()*self.Ystar()).sum()
-        
+
 
     def var_explained(self):
         XKY = self.compute_XKY(M=self.Yhat())
         beta_hat = self.Areml_solve(XKY)
         return (XKY*beta_hat).sum(), beta_hat
-        
+
 
     @cached
     def Xhat(self):
         RV = self.d[:,np.newaxis]*self.Xstar()
-        return RV 
+        return RV
 
     @cached
     def Areml(self):
@@ -440,7 +437,7 @@ class mean(cObject):
         self.clear_cache('DLZ')
         return RV
 
-    @cached 
+    @cached
     def Areml_eigh(self):
         """compute the eigenvalue decomposition of Astar"""
         s,U = LA.eigh(self.Areml(),lower=True)
@@ -461,12 +458,12 @@ class mean(cObject):
         try:
             res = LA.cho_solve((self.Areml_chol(),True),b)
         except LA.LinAlgError:
-            
+
             s,U = self.Areml_eigh()
             res = U.T.dot(b)
             res /= s[:,np.newaxis]
             res = U.dot(res)
-            
+
         return res
 
 
@@ -487,7 +484,7 @@ class mean(cObject):
 
     def compute_XKX(self):
         #n_weights1 = 0
-        # 
+        #
         #for term1 in xrange(self.n_terms):
         #    n_weights1+=self.Astar()[term1].shape[0] * self.Fstar()[term1].shape[1]
         #cov_beta = np.zeros((n_weights1,n_weights1))
@@ -508,7 +505,7 @@ class mean(cObject):
                 cov_beta[n_weights1:n_weights1 + self.A[term1].shape[0] * self.F[term1].shape[1], n_weights2:n_weights2 + self.A[term2].shape[0] * self.F[term2].shape[1]] = block
                 if term1!=term2:
                     cov_beta[n_weights2:n_weights2 + self.A[term2].shape[0] * self.F[term2].shape[1], n_weights1:n_weights1 + self.A[term1].shape[0] * self.F[term1].shape[1]] = block.T
-    
+
                 n_weights2+=self.A[term2].shape[0] * self.F[term2].shape[1]
 
             n_weights1+=self.A[term1].shape[0] * self.F[term1].shape[1]
@@ -558,13 +555,13 @@ class mean(cObject):
         return RV
 
     #########################################
-    # Params manipulation 
+    # Params manipulation
     #########################################
 
     def getParams(self):
         """ get params """
         rv = np.array([])
-        if self.n_terms>0: 
+        if self.n_terms>0:
             rv = np.concatenate([np.reshape(self.B[term_i],self.B[term_i].size, order='F') for term_i in range(self.n_terms)])
         return rv
 
@@ -593,7 +590,7 @@ class mean(cObject):
         """ update the indicator """
         _update = {'term': self.n_terms*np.ones((K,L)).T.ravel(),
                     'row': np.kron(np.arange(K)[:,np.newaxis],np.ones((1,L))).T.ravel(),
-                    'col': np.kron(np.ones((K,1)),np.arange(L)[np.newaxis,:]).T.ravel()} 
+                    'col': np.kron(np.ones((K,1)),np.arange(L)[np.newaxis,:]).T.ravel()}
         for key in list(_update.keys()):
             self.indicator[key] = np.concatenate([self.indicator[key],_update[key]])
 
@@ -608,8 +605,7 @@ class mean(cObject):
             K = self.F[term].shape[1]
             _update = {'term': (term+1)*np.ones((K,L)).T.ravel(),
                     'row': np.kron(np.arange(K)[:,np.newaxis],np.ones((1,L))).T.ravel(),
-                    'col': np.kron(np.ones((K,1)),np.arange(L)[np.newaxis,:]).T.ravel()} 
+                    'col': np.kron(np.ones((K,1)),np.arange(L)[np.newaxis,:]).T.ravel()}
             for key in list(_update.keys()):
                 indicator[key] = np.concatenate([indicator[key],_update[key]])
         self.indicator = indicator
-

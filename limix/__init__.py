@@ -1,6 +1,5 @@
 from .mtSet import MTSet
 from .varDecomp import VarianceDecomposition
-from .version import version as __version__
 
 from pkg_resources import get_distribution as _get_distribution
 from pkg_resources import DistributionNotFound as _DistributionNotFound

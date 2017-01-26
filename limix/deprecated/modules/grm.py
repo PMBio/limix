@@ -51,7 +51,7 @@ if __name__ == '__main__':
     # G = sp.stats.binom.rvs(2, 0.5, size=(1000, 10))
     # # _calculate_maf(G)
     # K = grm_unbiased(G)
-    # import ipdb; ipdb.set_trace()
+    # ; ipdb.set_trace()
     # print K
 
 

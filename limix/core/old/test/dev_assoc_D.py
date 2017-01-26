@@ -17,7 +17,7 @@ from limix.core.gp import gp2kronSum as gp2kronSum
 from limix.core.covar import freeform 
 import limix.core.optimize.optimize_bfgs as OPT
 import limix.core.association.lmm_kronecker as lmm
-import ipdb
+
 import scipy as SP
 import scipy.linalg as LA 
 import time as TIME
