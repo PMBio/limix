@@ -1,6 +1,5 @@
 import sys
-sys.path.insert(0,'./../../..')
-from limix.core.mean import LinearMean
+from limix.core.mean.linear import Linear
 
 import scipy as SP
 import scipy.linalg as LA
@@ -23,7 +22,7 @@ if __name__ == "__main__":
     Xr*= SP.sqrt(N/(Xr**2).sum())
 
     # define mean term
-    mean = LinearMean(Y)
+    mean = Linear(Y)
     print((mean.Y))
 
     # add first fixed effect

@@ -1,15 +1,14 @@
 import sys
 sys.path.insert(0,'./../../..')
-from limix.core.old.cobj import * 
+from limix.core.old.cobj import *
 from limix.utils.preprocess import regressOut
 from limix.core.mean.mean import compute_X1KX2
-from limix.core.mean.mean import compute_XYA
+from limix.core.mean.linear import compute_XYA
 import  limix.utils.psd_solve as psd_solve
 import numpy as np
-		    
+
 import scipy.linalg as la
 import copy
-import pdb
 
 
 class Mean(cObject):
@@ -20,7 +19,7 @@ class Mean(cObject):
         self.clearFixedEffect()
 
     #########################################
-    # Properties 
+    # Properties
     #########################################
 
     @property
@@ -42,7 +41,7 @@ class Mean(cObject):
     @property
     def P(self):
         return self.Y.shape[1]
-    
+
     @property
     def Lr(self):
         return self._Lr
@@ -77,12 +76,12 @@ class Mean(cObject):
             return dof
         else:
             return self.A[index].shape[0] * self.F[index].shape[1]
-    
+
     @property
     def dof_any(self):
         """The number of degrees of freedom for any effects terms"""
         return self.P * self.F_any.shape[1]
-    
+
     @d.setter
     def d(self,value):
         """ set anisotropic scaling """
@@ -90,7 +89,7 @@ class Mean(cObject):
         self._d = value
         self.clear_cache()
     #########################################
-    # Setters 
+    # Setters
     #########################################
 
     def clearFixedEffect(self):
@@ -169,19 +168,19 @@ class Mean(cObject):
         RV = []
         for term_i in range(self.len):
             RV.append(np.dot(self.A[term_i],self.Lc.T))
-        return RV 
+        return RV
 
     @property
     def Fstar(self):
         RV = []
         for term_i in range(self.len):
             RV.append(np.dot(self.Lr,self.F[term_i]))
-        return RV 
+        return RV
 
     @property
     def Astar_any(self):
-        return np.eye(self.P) 
-    
+        return np.eye(self.P)
+
     @property
     def Fstar_any(self):
         return np.dot(self.Lr,self.F_any)
@@ -208,7 +207,7 @@ class Mean(cObject):
 
     def var_total(self):
         return (self.Yhat()*self.Ystar()).sum()
-        
+
 
     def var_explained(self, identity_trick = False):
         XKY = self.XKY()
@@ -265,11 +264,11 @@ class Mean(cObject):
                 stop_col = start_col + self.A[term2].shape[0] * self.F[term2].shape[1]
                 cov_beta[start_row:stop_row, start_col:stop_col] = compute_X1KX2(Y=self.Ystar(), D=self.D, X1=self.Fstar[term1], X2=self.Fstar[term2], A1=self.Astar[term1], A2=self.Astar[term2])
                 if term1!=term2:
-                    cov_beta[start_col:stop_col, start_row:stop_row] = cov_beta[n_weights1:stop_row, n_weights2:stop_col].T    
+                    cov_beta[start_col:stop_col, start_row:stop_row] = cov_beta[n_weights1:stop_row, n_weights2:stop_col].T
                 start_col = stop_col
             start_row = stop_row
         return cov_beta
-        
+
 
     def XanyKX2_single_p_single_term(self, p, F2, A2=None, F1=None):
             X1D = F1
