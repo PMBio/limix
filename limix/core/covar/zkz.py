@@ -1,5 +1,5 @@
 import sys
-from hcache import cached
+from limix.hcache import cached
 import scipy as sp
 import numpy as np
 from .covar_base import Covariance

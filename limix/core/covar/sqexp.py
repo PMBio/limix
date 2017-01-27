@@ -1,5 +1,5 @@
 import sys
-from hcache import cached
+from limix.hcache import cached
 from limix.core.utils import assert_make_float_array
 from limix.core.utils import assert_finite_array
 import scipy as sp

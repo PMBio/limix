@@ -1,6 +1,6 @@
 import sys
 from limix.core.type.observed import Observed
-from hcache import Cached, cached
+from limix.hcache import Cached, cached
 from limix.core.utils.eigen import *
 import scipy as SP
 import pdb

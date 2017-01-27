@@ -1,7 +1,7 @@
 import sys
 from limix.core.mean import MeanKronSum
 from limix.core.covar import Cov3KronSumLR
-from hcache import Cached, cached
+from limix.hcache import Cached, cached
 from limix.utils.util_functions import vec
 
 import pdb

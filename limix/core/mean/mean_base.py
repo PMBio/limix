@@ -1,6 +1,6 @@
 import sys
 from limix.core.type.observed import Observed
-from hcache import Cached, cached
+from limix.hcache import Cached, cached
 from limix.utils.preprocess import regressOut
 from limix.core.utils import assert_finite_array
 import scipy as sp

@@ -159,7 +159,7 @@ def setup_package(reswig, compatible):
     pytest_runner = ['pytest-runner>=2.9'] if needs_pytest else []
 
     install_requires = [
-        "scikit-learn", "pandas", "hcache", "scipy", "h5py", "matplotlib"
+        "scikit-learn", "pandas", "scipy", "h5py", "matplotlib"
     ]
     setup_requires = [] + pytest_runner
     tests_require = ['pytest']

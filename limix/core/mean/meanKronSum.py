@@ -8,7 +8,7 @@ import pdb
 from .mean_base import MeanBase
 from limix.utils.preprocess import regressOut
 from limix.utils.util_functions import to_list
-from hcache import Cached, cached
+from limix.hcache import Cached, cached
 from limix.core.type.observed import *
 from limix.core.utils import assert_make_float_array
 from limix.core.utils import assert_type_or_list_type

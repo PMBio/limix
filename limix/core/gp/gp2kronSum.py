@@ -2,7 +2,7 @@ import sys
 from limix.core.mean import MeanKronSum
 from limix.core.covar import Cov2KronSum
 from limix.core.covar import Covariance
-from hcache import Cached, cached
+from limix.hcache import Cached, cached
 
 import pdb
 import numpy as NP

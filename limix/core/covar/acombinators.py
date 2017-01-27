@@ -2,7 +2,7 @@ from .covar_base import Covariance
 import pdb
 import numpy as np
 import scipy as sp
-from hcache import Cached, cached
+from limix.hcache import Cached, cached
 
 class ACombinatorCov(Covariance):
     """
@@ -86,5 +86,3 @@ class ACombinatorCov(Covariance):
             istop = istart + self.getCovariance(i).getNumberParams()
             self.getCovariance(i).setFIinv(value[istart:istop][:,istart:istop])
             istart = istop
-
-
