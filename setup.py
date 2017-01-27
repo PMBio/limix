@@ -182,7 +182,7 @@ def setup_package(reswig, compatible):
         setup_requires=setup_requires,
         tests_require=tests_require,
         zip_safe=False,
-        license='ASL',
+        license='Apache License 2.0',
         ext_modules=[core_extension(reswig)] + ensemble_extension(),
         cmdclass=dict(build_ext=build_ext_subclass),
         entry_points={
