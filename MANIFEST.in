@@ -9,3 +9,6 @@ recursive-include src/interfaces *.cpp *.txt *.i *.py
 recursive-include cython/lmm_forest *
 include limix/test/lmm_forest/test_data/lmm_forest_toy_data.h5
 recursive-include limix/ *.txt
+recursive-include limix/test/ *.txt
+recursive-include limix/test/lmm/ *.txt
+recursive-include limix/test/lmm/lmm_data1/ *.txt

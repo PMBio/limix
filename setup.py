@@ -180,7 +180,7 @@ def setup_package(reswig, compatible):
         url='http://pmbio.github.io/limix/',
         install_requires=install_requires,
         setup_requires=setup_requires,
-        tests_requires=tests_require,
+        tests_require=tests_require,
         zip_safe=False,
         license='ASL',
         ext_modules=[core_extension(reswig)] + ensemble_extension(),
