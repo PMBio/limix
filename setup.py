@@ -172,7 +172,7 @@ def setup_package(reswig, compatible):
         keywords='linear mixed models, GWAS, QTL, ' +
         'Variance component modelling',
         maintainer="Limix Developers",
-        author="Christoph Lippert, Paolo Casale, Oliver Stegle",
+        author="Danilo Horta, Christoph Lippert, Paolo Casale, Oliver Stegle",
         author_email="stegle@ebi.ac.uk",
         maintainer_email="stegle@ebi.ac.uk",
         packages=find_packages(),
