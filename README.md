@@ -20,7 +20,7 @@ Currently we support this installation for Linux 64 bits and OSX operating
 systems.
 
 ```
-conda install -c https://conda.anaconda.org/horta limix
+conda install -c conda-forge limix
 ```
 
 ### Using Pip
