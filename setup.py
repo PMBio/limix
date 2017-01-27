@@ -35,6 +35,12 @@ class build_ext_subclass(build_ext):
                 stdcpp = '-std=c++0x'
             for e in self.extensions:
                 e.extra_compile_args.append(stdcpp)
+                e.extra_compile_args.append('-Wno-deprecated-declarations')
+                e.extra_compile_args.append('-Wno-unused-local-typedefs')
+                e.extra_compile_args.append('-Wno-sign-compare')
+                e.extra_compile_args.append('-Wno-self-assign')
+                e.extra_compile_args.append('-Wno-macro-redefined')
+                e.extra_compile_args.append('-Wno-unused-const-variable')
 
             conf_vars = sysconfig.get_config_vars()
             if 'MACOSX_DEPLOYMENT_TARGET' in conf_vars and len(conf_vars[
@@ -67,7 +73,7 @@ def extra_compile_args():
     if sys.platform.startswith('win'):
         return []
     return [
-        '-Wno-comment', '-Wno-unused-but-set-variable',
+        '-Wno-comment', '-Wno-unused-const-variable',
         '-Wno-overloaded-virtual', '-Wno-uninitialized',
         '-Wno-delete-non-virtual-dtor', '-Wunused-variable'
     ]
@@ -166,7 +172,7 @@ def setup_package(reswig, compatible):
 
     metadata = dict(
         name="limix",
-        version="0.8.2",
+        version="0.8.3",
         description="A flexible and fast mixed model toolbox.",
         long_description=long_description,
         keywords='linear mixed models, GWAS, QTL, ' +

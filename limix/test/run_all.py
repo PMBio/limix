@@ -11,9 +11,9 @@ if __name__ == '__main__':
         sys.path.insert(0,limix_path)
 
     if len(sys.argv)>2:
-	folders = [sys.argv[2]]
+        folders = [sys.argv[2]]
     else:
-    	folders = set(glob.glob('*'))-set(glob.glob('*.*'))
+        folders = set(glob.glob('*'))-set(glob.glob('*.*'))
 
     # Gather all tests in suite
     suite = unittest.TestSuite()
