@@ -176,6 +176,7 @@ def setup_package(reswig, compatible):
         author_email="stegle@ebi.ac.uk",
         maintainer_email="stegle@ebi.ac.uk",
         packages=find_packages(),
+        include_package_data=True,
         url='http://pmbio.github.io/limix/',
         install_requires=install_requires,
         setup_requires=setup_requires,
