@@ -1,70 +1,35 @@
 # Limix
 
-[![PyPIl](https://img.shields.io/pypi/l/limix.svg?style=flat-square)](https://pypi.python.org/pypi/limix/) [![PyPIv](https://img.shields.io/pypi/v/limix.svg?style=flat-square)](https://pypi.python.org/pypi/limix/) [![Anaconda](https://anaconda.org/conda-forge/limix/badges/version.svg)](https://anaconda.org/conda-forge/limix) [![Travis](https://img.shields.io/travis/PMBio/limix.svg?style=flat-square)](https://travis-ci.org/PMBio/limix)
-
+[![PyPI-License](https://img.shields.io/pypi/l/limix.svg?style=flat-square)](https://pypi.python.org/pypi/limix/) [![PyPI-Version](https://img.shields.io/pypi/v/limix.svg?style=flat-square)](https://pypi.python.org/pypi/limix/) [![Anaconda-Version](https://anaconda.org/conda-forge/limix/badges/version.svg)](https://anaconda.org/conda-forge/limix) [![Anaconda-Downloads](https://anaconda.org/conda-forge/limix/badges/downloads.svg)](https://anaconda.org/conda-forge/limx)
 
 Limix is a flexible and efficient linear mixed model library with interfaces
-to Python. Genomic analyses require flexible models that can be adapted to the needs of
-the user. Limix is smart about how particular models are fitted to save
+to Python.
+Genomic analyses require flexible models that can be adapted to the needs of
+the user.
+Limix is smart about how particular models are fitted to save
 computational cost.
 
 LATEST: [iSet, interaction set tests for gene-context interactions, is now in Limix.](https://github.com/PMBio/limix-tutorials/tree/master/iSet)
 
-## Installation
+## Install
 
-### Using Conda package manager
+The recommended way of installing it is via
+[conda](http://conda.pydata.org/docs/index.html)
 
-Conda is a package manager designed for Python and R users/developers of
-scientific tools, and comes with the [Anaconda distribution](https://www.continuum.io/downloads).
-Currently we support this installation for Linux 64 bits and OSX operating
-systems.
-
-```
+```bash
 conda install -c conda-forge limix
 ```
 
-### Using Pip
+An alternative way (and likely to fail) would be via pip
 
-If you don't have Conda (or don't want to use the above method), Limix can be
-installed via Pip package manager.
 ```
 pip install limix
-```
-This approach is not as straightforward as the first one because it requires
-compilation of C/C++ and (potentially) Fortran code, and some understanding
-of dependency resolution is likely to be required. We provide bellow recipes
-for some popular Limix distributions, assuming you have the `wget` command line
-tool.
-
-- Ubuntu
-
-    ```
-    bash <(wget -O - https://raw.githubusercontent.com/PMBio/limix/master/deploy/apt_limix_install)
-    ```
-
-- Fedora
-    ```
-    bash <(wget -O - https://raw.githubusercontent.com/PMBio/limix/master/deploy/dnf_limix_install)
-    ```
-
-- OpenSUSE
-    ```
-    bash <(wget -O - https://raw.githubusercontent.com/PMBio/limix/master/deploy/zypper_limix_install)
-    ```
-
-### From source
-
-This is more tricky in terms of dependency resolution but useful for developers.
-
-```
-git clone https://github.com/PMBio/limix.git
-cd limix
-python setup.py install # or python setup.py develop
 ```
 
 ## Usage
 
-A good starting point is our package Vignettes. These tutorials are available from this repository: https://github.com/PMBio/limix-tutorials.
+A good starting point is our package Vignettes.
+These tutorials are available from this repository: https://github.com/PMBio/limix-tutorials.
 
 The main package vignette can also be viewed using the ipython notebook viewer:
 http://nbviewer.ipython.org/github/pmbio/limix-tutorials/blob/master/index.ipynb.
@@ -78,11 +43,12 @@ If you want to use Limix and encounter any issues, please contact us via `limix@
 
 ## Authors
 
-- `Franceso Paolo Casale` (`casale@ebi.ac.uk`)
-- `Danilo Horta` (`horta@ebi.ac.uk`)
-- `Christoph Lippert` (`christoph.a.lippert@gmail.com`)
-- `Oliver Stegle` (`stegle@ebi.ac.uk`)
+* **Franceso Paolo Casale** - [https://github.com/fpcasale](https://github.com/fpcasale)
+* **Danilo Horta** [https://github.com/Horta](https://github.com/Horta)
+* **Christoph Lippert** [https://github.com/clippert](https://github.com/clippert)
+* **Oliver Stegle** [https://github.com/ostegle](https://github.com/ostegle)
 
 ## License
 
-See [Apache License (Version 2.0, January 2004)](https://github.com/PMBio/limix/blob/master/LICENSE).
+This project is licensed under the Apache License (Version 2.0, January 2004) -
+see the [LICENSE](LICENSE) file for details
