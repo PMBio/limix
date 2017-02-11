@@ -1,6 +1,6 @@
 # Limix
 
-[![PyPI-License](https://img.shields.io/pypi/l/limix.svg?style=flat-square)](https://pypi.python.org/pypi/limix/) [![PyPI-Version](https://img.shields.io/pypi/v/limix.svg?style=flat-square)](https://pypi.python.org/pypi/limix/) [![Anaconda-Version](https://anaconda.org/conda-forge/limix/badges/version.svg)](https://anaconda.org/conda-forge/limix) [![Anaconda-Downloads](https://anaconda.org/conda-forge/limix/badges/downloads.svg)](https://anaconda.org/conda-forge/limx)
+[![PyPI-License](https://img.shields.io/pypi/l/limix.svg?style=flat-square)](https://pypi.python.org/pypi/limix/) [![PyPI-Version](https://img.shields.io/pypi/v/limix.svg?style=flat-square)](https://pypi.python.org/pypi/limix/) [![Anaconda-Version](https://anaconda.org/conda-forge/limix/badges/version.svg)](https://anaconda.org/conda-forge/limix) [![Anaconda-Downloads](https://anaconda.org/conda-forge/limix/badges/downloads.svg)](https://anaconda.org/conda-forge/limix)
 
 Limix is a flexible and efficient linear mixed model library with interfaces
 to Python.
@@ -29,7 +29,8 @@ pip install limix
 ## Usage
 
 A good starting point is our package Vignettes.
-These tutorials are available from this repository: https://github.com/PMBio/limix-tutorials.
+These tutorials are available from this repository:
+https://github.com/PMBio/limix-tutorials.
 
 The main package vignette can also be viewed using the ipython notebook viewer:
 http://nbviewer.ipython.org/github/pmbio/limix-tutorials/blob/master/index.ipynb.
@@ -39,14 +40,14 @@ https://github.com/PMBio/limix-tutorials
 
 ## Problems
 
-If you want to use Limix and encounter any issues, please contact us via `limix@mixed-models.org`.
+If you encounter any issue, please, [submit it](https://github.com/PMBio/limix/issues).
 
 ## Authors
 
+* **Christoph Lippert** - [https://github.com/clippert](https://github.com/clippert)
+* **Danilo Horta** - [https://github.com/Horta](https://github.com/Horta)
 * **Franceso Paolo Casale** - [https://github.com/fpcasale](https://github.com/fpcasale)
-* **Danilo Horta** [https://github.com/Horta](https://github.com/Horta)
-* **Christoph Lippert** [https://github.com/clippert](https://github.com/clippert)
-* **Oliver Stegle** [https://github.com/ostegle](https://github.com/ostegle)
+* **Oliver Stegle** - [https://github.com/ostegle](https://github.com/ostegle)
 
 ## License
 
