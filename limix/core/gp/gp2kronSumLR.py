@@ -377,6 +377,12 @@ class GP2KronSumLR(GP):
     def yKiWb(self):
         return (self.WKiy() * self.mean.b).sum()
 
+    @cached(['designs', 'row_cov', 'col_cov', 'pheno'])
+    def Kiy(self):
+        R = sp.dot(self.YLc(), self.covar.Lc())
+        R -= sp.dot(self.covar.Wr().T, sp.dot(sp.dot(self.DWrYLcWc(), self.covar.Wc()), self.covar.Lc()))
+        return R
+
     #########################
     # Gradients
     #########################
