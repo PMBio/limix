@@ -239,3 +239,4 @@ if __name__ == '__main__':
         sys.argv.remove("--compatible")
 
     setup_package(reswig, compatible)
+
