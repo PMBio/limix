@@ -57,6 +57,7 @@ class Categorical(Covariance):
 
     #####################
     # cov and gradient
+    # DO NOT CACHE here (cached in member cat_cov)
     #####################
     def K(self):
         R = self.cat_cov.K()
@@ -70,7 +71,6 @@ class Categorical(Covariance):
 
     #####################
     # Expanding the category * category matrices
-    # DO NOT CACHE here (cached in member cat_cov)
     #####################
     def expand(self, mat):
         R = np.zeros([self.dim, self.dim])
