@@ -167,7 +167,7 @@ def setup_package(reswig, compatible):
     install_requires = [
         "scikit-learn", "pandas", "scipy", "h5py", "matplotlib"
     ]
-    setup_requires = [] + pytest_runner
+    setup_requires = ['cython'] + pytest_runner
     tests_require = ['pytest']
 
     metadata = dict(
