@@ -112,6 +112,8 @@ class LowRankCov(Covariance):
         R += R.T
         return R
 
+    # TODO hessian ?
+
     ####################
     # TODO: Interpretable Params
     ####################

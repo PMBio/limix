@@ -11,3 +11,4 @@ from .cov3kronSumLR import Cov3KronSumLR
 from .covar_base import Covariance
 from .categoricalLR import CategoricalLR
 from .zkz import ZKZCov
+from .categorical import Categorical
