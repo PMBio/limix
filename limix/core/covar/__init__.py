@@ -3,7 +3,7 @@ from .diagonal import DiagonalCov
 from .sqexp import SQExpCov
 from .freeform import FreeFormCov
 from .lowrank import LowRankCov
-from .combinators import SumCov
+from .combinators import SumCov, ProdCov
 from .kronecker import KronCov
 from .cov2kronSum import Cov2KronSum
 from .cov2kronSumLR import Cov2KronSumLR
