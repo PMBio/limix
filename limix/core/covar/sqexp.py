@@ -114,7 +114,8 @@ class SQExpCov(Covariance):
 
     @Covariance.use_to_predict.setter
     def use_to_predict(self,value):
-        assert self.Xstar is not None, 'set Xstar!'
+        if value:
+            assert self.Xstar is not None, 'set Xstar!'
         self._use_to_predict = value
         self._notify()
 
@@ -163,6 +164,15 @@ class SQExpCov(Covariance):
     def getNumberParams(self):
         return np.sum([self._scale_act, self._length_act])
 
+    # constraining lengtth scale
+    def setPenalty(self, mu, sigma):
+        self.penalty_function = np.zeros(2)
+        self.penalty_function[0] = mu
+        self.penalty_function[1] = sigma
+
+        # making initialisation consistent with prior
+        self.length = mu
+
     #####################
     # Cached
     #####################
@@ -174,9 +184,8 @@ class SQExpCov(Covariance):
 
     @cached(['X', 'Xstar', 'covar_base'])
     def Kcross(self):
-        assert self.Xstar.shape[1]==1, 'only implemented for 1-dim input'
-        Estar = (self.Xstar - self.X.T)**2
-        return  self.scale * sp.exp(-Estar/(2*self.length))
+        Estar = SS.distance.cdist(self.Xstar, self.X, 'euclidean')**2
+        return self.scale * sp.exp(-Estar/(2*self.length))
 
     @cached('covar_base')
     def K(self):
@@ -216,6 +225,25 @@ class SQExpCov(Covariance):
         else:
             assert False, 'There is no index %d on sqexp.' %i
         return r
+
+    # gradient and likelihood terms from the penalty
+    @cached('covar_base')
+    def penalty(self):
+        if self.penalty_function is None:
+            return 0
+        else:
+            return (1/(2*self.penalty_function[1]**2.0)) * (self.length - self.penalty_function[0])**2.0
+
+    @cached('covar_base')
+    def penalty_grad(self, i):
+        if self.penalty_function is None:
+            return 0
+        elif i == 0:
+            return 0
+        elif i == 1:
+            return 2.0*((1/(2*self.penalty_function[1]**2.0)) * (self.length - self.penalty_function[0])) * self.length
+        else:
+            raise Exception('Index out of range for penalty gradient')
 
     ####################
     # Interpretable Params
