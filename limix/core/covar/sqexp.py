@@ -16,8 +16,8 @@ class SQExpCov(Covariance):
     """
     def __init__(self, X, Xstar=None):
         """
-        X:          [dim, 1] input matrix
-        Xstar:      [dim_star, 1] out-of-sample input matrix
+        X:          [dim, N] input matrix
+        Xstar:      [dim_star, N] out-of-sample input matrix
         """
         Covariance.__init__(self)
         self._scale_act = True
