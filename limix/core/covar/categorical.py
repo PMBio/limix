@@ -40,9 +40,8 @@ class Categorical(Covariance):
 
     def initialize_cats(self):
         self.i_categories = np.zeros(len(self.categories))
-        for i in range(self.unique_categories):
+        for i in range(self.n_categories):
             self.i_categories += (self.categories == self.unique_categories[i])*i
-
 
     #####################
     # Params handling
@@ -57,22 +56,21 @@ class Categorical(Covariance):
         return self.cat_cov.getNumberParams()
 
     #####################
-    # Cached
+    # cov and gradient
     #####################
-    @cached('covar_base')
     def K(self):
-        _K = self.cat_cov.K()
-        return self.expand(_K)
+        R = self.cat_cov.K()
+        return self.expand(R)
 
-    @cached('covar_base')
     def K_grad_i(self, i):
-        _grad = self.cat_cov.K_grad_i(i)
-        return self.expand(_grad)
+        R = self.cat_cov.K_grad_i(i)
+        return self.expand(R)
 
     # TODO: hessian ? not implemented for lowrank
 
     #####################
     # Expanding the category * category matrices
+    # DO NOT CACHE here (cached in member cat_cov)
     #####################
     def expand(self, mat):
         R = np.zeros([self.dim, self.dim])
@@ -81,3 +79,4 @@ class Categorical(Covariance):
                 tmp_i = (self.i_categories == i)[:, None]
                 tmp_j = (self.i_categories == j)[None, :]
                 R += tmp_i.dot(tmp_j) * mat[i,j]
+        return R
