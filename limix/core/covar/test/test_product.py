@@ -7,15 +7,17 @@ import scipy as sp
 
 class TestProd(unittest.TestCase):
     def setUp(self):
-        np.random.seed(1)
+        # np.random.seed(1)
         self._X1 = np.random.randn(10, 5)
         self._X2 = np.random.randn(10, 8)
+        self._X3 = np.random.randn(10, 7)
         self._cov1 = SQExpCov(self._X1)
         self._cov2 = SQExpCov(self._X2)
-        self._cov = ProdCov(self._cov1, self._cov2)
+        self._cov3 = SQExpCov(self._X3)
+        self._cov = ProdCov(self._cov1, self._cov2, self._cov3)
 
     def test_sum_combination(self):
-        K1 = self._cov1.K() * self._cov2.K()
+        K1 = self._cov1.K() * self._cov2.K() * self._cov3.K()
         K2 = self._cov.K()
 
         np.testing.assert_almost_equal(K1, K2)
