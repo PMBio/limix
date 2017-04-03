@@ -52,6 +52,13 @@ class ACombinatorCov(Covariance):
     def getNumberParams(self):
         return np.sum([c.getNumberParams() for c in self.covars])
 
+    @cached('covar_base')
+    def penalty(self):
+        total_penalty = 0
+        for i in range(len(self.covars)):
+            total_penalty += self.getCovariance(i).penalty()
+        return total_penalty
+
     ####################
     # Predictions
     ####################

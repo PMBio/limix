@@ -56,6 +56,18 @@ class SumCov(ACombinatorCov):
             istart = istop
         return None
 
+    # gradients from penalties on any term of the covariance
+    @cached('covar_base')
+    def penalty_grad(self, i):
+        istart = 0
+        for j in range(len(self.covars)):
+            istop = istart + self.getCovariance(j).getNumberParams()
+            if (i < istop):
+                idx = i - istart
+                return self.getCovariance(j).penalty_grad(idx)
+            istart = istop
+        return None
+
     @cached('covar_base')
     def K_hess_i_j(self, i, j):
         istart = 0
@@ -96,5 +108,3 @@ class SumCov(ACombinatorCov):
                 return self.getCovariance(j).K_grad_interParam_i(idx)
             istart = istop
         return None
-
-
