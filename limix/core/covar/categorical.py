@@ -104,7 +104,7 @@ class Categorical(Covariance):
         R = self.cat_cov.K_grad_i(i)
         return self.expand(R)
 
-    def K_star(self):
+    def Kcross(self):
         R = self.cat_cov.K()
         return self.expand_star(R)
 
