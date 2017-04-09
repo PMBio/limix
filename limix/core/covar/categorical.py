@@ -18,7 +18,7 @@ class Categorical(Covariance):
         - cat_cov, a covariance matrix between categories, whose dimensions are determined
         by the number of categories -> can be free form or low rank
     """
-    def __init__(self, categories, rank=None, cats_star=None):
+    def __init__(self, categories, rank=None, cats_star=None, jitter= 1e-4):
         Covariance.__init__(self)
 
         self.cats = categories
@@ -26,6 +26,7 @@ class Categorical(Covariance):
         self.n_cats = len(self.unique_cats)
         self.rank = rank
         self.dim = len(self.cats)
+        self.jitter = jitter
 
         # TODO do this cleanly with setters and properties (including the initialise_function)
         # initialisation predictions
@@ -43,7 +44,7 @@ class Categorical(Covariance):
 
     def initialize_cov(self):
         if self.rank is None:
-            self.cat_cov = freeform.FreeFormCov(self.n_cats)
+            self.cat_cov = freeform.FreeFormCov(self.n_cats, jitter=self.jitter)
         else:
             self.cat_cov = lowrank.LowRankCov(self.n_cats, self.rank)
 
@@ -88,6 +89,9 @@ class Categorical(Covariance):
 
     def getParams(self):
         return self.cat_cov.getParams()
+
+    def getInterParams(self):
+        return self.cat_cov.getInterParams()
 
     def getNumberParams(self):
         return self.cat_cov.getNumberParams()
