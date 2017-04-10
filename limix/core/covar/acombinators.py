@@ -79,7 +79,7 @@ class ACombinatorCov(Covariance):
     ####################
     def getInterParams(self):
         istart = 0
-        interParams = sp.zeros(self.getNumberParams())
+        params = sp.zeros(self.getNumberParams())
         for i in range(len(self.covars)):
             istop = istart + self.getCovariance(i).getNumberParams()
             params[istart:istop] = self.getCovariance(i).getInterParams()

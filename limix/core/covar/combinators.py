@@ -128,7 +128,6 @@ class ProdCov(ACombinatorCov):
     #####################
     # Cached
     #####################
-    # TODO test
     @cached('covar_base')
     def K(self):
         K = sp.ones((self.dim,self.dim))
@@ -152,7 +151,6 @@ class ProdCov(ACombinatorCov):
         return R
 
     @cached('covar_base')
-    # TODO test
     def K_grad_i(self,i):
         istart = 0
         for j in range(len(self.covars)):
@@ -181,7 +179,6 @@ class ProdCov(ACombinatorCov):
         return None
 
     @cached('covar_base')
-    # TODO test
     def K_hess_i_j(self, i, j):
         istart = 0
         jstart = 0

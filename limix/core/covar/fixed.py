@@ -36,7 +36,7 @@ class FixedCov(Covariance):
     #####################
     @property
     def scale(self):
-        return self._scale 
+        return self._scale
 
     @property
     def scale_ste(self):
@@ -55,7 +55,7 @@ class FixedCov(Covariance):
     def X0(self):
         S, U = la.eigh(self.K0)
         I = (S>1e-9)
-        return U[:,I]*S[I]**(0.5) 
+        return U[:,I]*S[I]**(0.5)
 
     @property
     @cached(['covar_base', 'K0'])
@@ -72,7 +72,7 @@ class FixedCov(Covariance):
     @scale.setter
     def scale(self,value):
         assert value >= 0, 'Scale must be >= 0.'
-        self._scale = value 
+        self._scale = value
         self.clear_all()
 
     @K0.setter
@@ -170,7 +170,7 @@ class FixedCov(Covariance):
     ####################
     def getInterParams(self):
         if self._scale_act:
-            return SP.array([self.scale])
+            return sp.array([self.scale])
         return np.array([])
 
     def K_grad_interParam_i(self,i):
@@ -186,4 +186,3 @@ if __name__=='__main__':
     import pdb
     C = FixedCov(sp.ones((2,2)))
     pdb.set_trace()
-

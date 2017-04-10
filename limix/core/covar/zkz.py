@@ -252,7 +252,7 @@ class ZKZCov(Covariance):
     # Interpretable Params
     ####################
     def getInterParams(self):
-        return sp.array([self.se.scale, self.se.length])
+        return self.se.getInterParams()
 
     # def K_grad_interParam_i(self,i):
     #     if i==0:

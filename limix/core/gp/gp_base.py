@@ -192,8 +192,8 @@ class GP(Cached, Observed):
         R = None
         if self.covar.use_to_predict:
             Kcross = self.covar.Kcross()
-            Kiyres = self.Kiy()-self.KiWb()
-            R = sp.dot(Kcross, Kiyres)
+            Kiy = self.Kiy()
+            R = sp.dot(Kcross, Kiy)
         if self.mean.use_to_predict:
             _ = self.mean.predict()
             if R is None:
@@ -202,6 +202,9 @@ class GP(Cached, Observed):
                 assert _.shape[0] == R.shape[0], 'Dimension mismatch'
                 assert _.shape[1] == R.shape[1], 'Dimension mismatch'
                 R += _
+        if self.covar.use_to_predict and self.mean.use_to_predict:
+            KiWb = self.KiWb()
+            R -= sp.dot(Kcross, KiWb)
         return R
 
     #########################
