@@ -18,7 +18,7 @@ class Categorical(Covariance):
         - cat_cov, a covariance matrix between categories, whose dimensions are determined
         by the number of categories -> can be free form or low rank
     """
-    def __init__(self, categories, rank=None, cats_star=None, jitter= 1e-4):
+    def __init__(self, categories, rank=None, cat_star=None, jitter= 1e-4):
         Covariance.__init__(self)
 
         self.cats = categories
@@ -30,12 +30,13 @@ class Categorical(Covariance):
 
         # TODO do this cleanly with setters and properties (including the initialise_function)
         # initialisation predictions
-        self.cats_star = cats_star
-        if self.cats_star is None:
-            self._use_to_predict = False
-        else:
-            self.initialize_cats_star()
-            self._use_to_predict = True
+        self.cat_star = cat_star
+
+        # if self.cat_star is None:
+        #     self._use_to_predict = False
+        # else:
+        #     self.initialize_cat_star()
+        #     self._use_to_predict = True
 
         # initialise covariance matrix between categories
         self.initialize_cov()
@@ -53,33 +54,42 @@ class Categorical(Covariance):
         for i in range(self.n_cats):
             self.i_cats += (self.cats == self.unique_cats[i])*i
 
-    def initialize_cats_star(self):
-        # check that all categories in cats_star are also found in cats
-        cats_star_uq = np.unique(self.cats_star)
-        assert all(np.in1d(cats_star_uq, self.unique_cats)), 'all categories used for prediction must be seen during training'
+    def initialize_cat_star(self):
+        # check that all categories in cat_star are also found in cats
+        cat_star_uq = np.unique(self.cat_star)
+        assert all(np.in1d(cat_star_uq, self.unique_cats)), 'all categories used for prediction must be seen during training'
 
         # build the int category vector
-        self.i_cats_star = np.zeros(len(self.cats_star))
+        self.i_cat_star = np.zeros(len(self.cat_star))
         for i in range(self.n_cats):
-            self.i_cats_star += (self.cats_star == self.unique_cats[i])*i
+            self.i_cat_star += (self.cat_star == self.unique_cats[i])*i
 
-    # #####################
-    # # properties
-    # #####################
-    # @property
-    # def cat_star(self):
-    #     return self.cat_star
-    #
-    # #####################
-    # # Setters
-    # #####################
-    # @cats_star.setter
-    # def cats_star(self, value):
-    #     if value is None:
-    #         self._use_to_predict = False
-    #     else:
-    #         self._use_to_predict = True
-    #     self.cats_star = value
+    #####################
+    # properties
+    #####################
+    @property
+    def cat_star(self):
+        return self._cat_star
+
+    #####################
+    # Setters
+    #####################
+    @cat_star.setter
+    def cat_star(self, value):
+        if value is None:
+            self._use_to_predict = False
+            self._cat_star = value
+        else:
+            self._use_to_predict = True
+
+            # check that all categories in cat_star are also found in cats
+            cat_star_uq = np.unique(self.cat_star)
+            assert all(np.in1d(cat_star_uq, self.unique_cats)), 'all categories used for prediction must be seen during training'
+
+            # build the int category vector
+            self.i_cat_star = np.zeros(len(self.cat_star))
+            for i in range(self.n_cats):
+                self.i_cat_star += (self.cat_star == self.unique_cats[i])*i
 
     #####################
     # Params handling
@@ -129,11 +139,11 @@ class Categorical(Covariance):
 
     # for the cross covariance
     def expand_star(self, mat):
-        n_star = len(self.cats_star)
+        n_star = len(self.cat_star)
         R = np.zeros([n_star, self.dim])
         for i in range(self.n_cats):
             for j in range(self.n_cats):
-                tmp_i = (self.i_cats_star == i)[:, None]
+                tmp_i = (self.i_cat_star == i)[:, None]
                 tmp_j = (self.i_cats == j)[None, :]
                 R += tmp_i.dot(tmp_j) * mat[i,j]
         return R
