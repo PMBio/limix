@@ -2,11 +2,11 @@
 import unittest
 import scipy as sp
 import numpy as np
-from limix.core.covar import Categorical
+from limix.core.covar import CategoricalCov
 from limix.utils.check_grad import mcheck_grad
 
 class TestCategoricalLowRank(unittest.TestCase):
-    """test class for Categorical cov"""
+    """test class for CategoricalCov cov"""
     def setUp(self):
         sp.random.seed(1)
         self.n = 30
@@ -14,7 +14,7 @@ class TestCategoricalLowRank(unittest.TestCase):
 
         self.rank =2
 
-        self.C = Categorical(categories,self.rank)
+        self.C = CategoricalCov(categories,self.rank)
         self.name = 'categorical'
         self.C.setRandomParams()
 
@@ -53,7 +53,7 @@ class TestCategoricalFreeForm(unittest.TestCase):
 
         self.rank =None
 
-        self.C = Categorical(categories,self.rank)
+        self.C = CategoricalCov(categories,self.rank)
         self.name = 'categorical'
         self.C.setRandomParams()
 
