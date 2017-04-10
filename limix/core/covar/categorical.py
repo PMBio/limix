@@ -21,12 +21,9 @@ class Categorical(Covariance):
     def __init__(self, categories, rank=None, cat_star=None, jitter= 1e-4):
         Covariance.__init__(self)
 
-        self.cats = categories
-        self.unique_cats = np.unique(categories)
-        self.n_cats = len(self.unique_cats)
-        self.rank = rank
-        self.dim = len(self.cats)
+        self.cat = categories
         self.jitter = jitter
+        self.rank = rank
 
         # TODO do this cleanly with setters and properties (including the initialise_function)
         # initialisation predictions
@@ -39,34 +36,42 @@ class Categorical(Covariance):
         #     self._use_to_predict = True
 
         # initialise covariance matrix between categories
-        self.initialize_cov()
-        # build a categories_num vector where categories are integers from 0 to number of categories
-        self.initialize_cats()
+        # self.initialize_cov()
+        # # build a categories_num vector where categories are integers from 0 to number of categories
+        # self.initialize_cats()
+        #
+    # def initialize_cov(self):
+    #     if self.rank is None:
+    #         self.cat_cov = freeform.FreeFormCov(self.n_cats, jitter=self.jitter)
+    #     else:
+    #         self.cat_cov = lowrank.LowRankCov(self.n_cats, self.rank)
+    #
+    # def initialize_cats(self):
+    #     self._i_cats = np.zeros(len(self.cat))
+    #     for i in range(self.n_cats):
+    #         self._i_cats += (self.cat == self.unique_cats[i])*i
 
-    def initialize_cov(self):
-        if self.rank is None:
-            self.cat_cov = freeform.FreeFormCov(self.n_cats, jitter=self.jitter)
-        else:
-            self.cat_cov = lowrank.LowRankCov(self.n_cats, self.rank)
-
-    def initialize_cats(self):
-        self.i_cats = np.zeros(len(self.cats))
-        for i in range(self.n_cats):
-            self.i_cats += (self.cats == self.unique_cats[i])*i
-
-    def initialize_cat_star(self):
-        # check that all categories in cat_star are also found in cats
-        cat_star_uq = np.unique(self.cat_star)
-        assert all(np.in1d(cat_star_uq, self.unique_cats)), 'all categories used for prediction must be seen during training'
-
-        # build the int category vector
-        self.i_cat_star = np.zeros(len(self.cat_star))
-        for i in range(self.n_cats):
-            self.i_cat_star += (self.cat_star == self.unique_cats[i])*i
+    # def initialize_cat_star(self):
+    #     # check that all categories in cat_star are also found in cats
+    #     cat_star_uq = np.unique(self.cat_star)
+    #     assert all(np.in1d(cat_star_uq, self.unique_cats)), 'all categories used for prediction must be seen during training'
+    #
+    #     # build the int category vector
+    #     self.i_cat_star = np.zeros(len(self.cat_star))
+    #     for i in range(self.n_cats):
+    #         self.i_cat_star += (self.cat_star == self.unique_cats[i])*i
 
     #####################
     # properties
     #####################
+    @property
+    def cat(self):
+        return self._cat
+
+    @property
+    def rank(self):
+        return self._rank
+
     @property
     def cat_star(self):
         return self._cat_star
@@ -74,6 +79,29 @@ class Categorical(Covariance):
     #####################
     # Setters
     #####################
+    @cat.setter
+    def cat(self, value):
+        self._cat = value
+
+        # initialise related members
+        self.dim = len(value)
+        self.unique_cats = np.unique(value)
+        self.n_cats = len(self.unique_cats)
+
+        # initialise int indexed categories
+        self._i_cats = np.zeros(len(value))
+        for i in range(self.n_cats):
+            self._i_cats += (value == self.unique_cats[i])*i
+
+    @rank.setter
+    def rank(self, value):
+        self._rank = value
+        if value is None:
+            self.cat_cov = freeform.FreeFormCov(self.n_cats, jitter=self.jitter)
+        else:
+            assert value <= self.n_cats, 'rank cant be higher than number of categories'
+            self.cat_cov = lowrank.LowRankCov(self.n_cats, value)
+
     @cat_star.setter
     def cat_star(self, value):
         if value is None:
@@ -132,8 +160,8 @@ class Categorical(Covariance):
         R = np.zeros([self.dim, self.dim])
         for i in range(self.n_cats):
             for j in range(self.n_cats):
-                tmp_i = (self.i_cats == i)[:, None]
-                tmp_j = (self.i_cats == j)[None, :]
+                tmp_i = (self._i_cats == i)[:, None]
+                tmp_j = (self._i_cats == j)[None, :]
                 R += tmp_i.dot(tmp_j) * mat[i,j]
         return R
 
@@ -144,6 +172,6 @@ class Categorical(Covariance):
         for i in range(self.n_cats):
             for j in range(self.n_cats):
                 tmp_i = (self.i_cat_star == i)[:, None]
-                tmp_j = (self.i_cats == j)[None, :]
+                tmp_j = (self._i_cats == j)[None, :]
                 R += tmp_i.dot(tmp_j) * mat[i,j]
         return R
